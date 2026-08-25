@@ -3,8 +3,6 @@
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_BASE_PATH = "/Zynvera"
-  NEXT_PUBLIC_APP_URL = "https://localhousellm.com/Zynvera"
   NEXT_PUBLIC_SUPABASE_URL = "https://ccqfhsfkhrkbpczmuolp.supabase.co"
   NEXT_PUBLIC_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNjcWZoc2ZraHJrYnBjem11b2xwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODczOTI0MTcsImV4cCI6MjEwMjk2ODQxN30.UGFg2j5uDzM17Uh2Y8M4pb9pEc4B0EA1pd4I98xqo9k"
   ENCRYPTION_KEY = "set-via-netlify-dashboard"
@@ -13,16 +11,3 @@
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
-
-# Send bare-root visitors into the app.
-[[redirects]]
-  from = "/"
-  to = "/Zynvera"
-  status = 301
-  force = true
-
-[[redirects]]
-  from = "/Zynvera/"
-  to = "/Zynvera/"
-  status = 200
-  force = true
