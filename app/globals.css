@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 38 33% 97%;
+    --foreground: 222 38% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 38% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 38% 14%;
+    --primary: 222 48% 20%;
+    --primary-foreground: 38 33% 97%;
+    --secondary: 35 28% 92%;
+    --secondary-foreground: 222 38% 14%;
+    --muted: 35 24% 94%;
+    --muted-foreground: 220 12% 43%;
+    --accent: 9 76% 59%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 35 18% 86%;
+    --input: 35 18% 82%;
+    --ring: 9 76% 59%;
+    --chart-1: 9 76% 59%;
+    --chart-2: 174 44% 42%;
+    --chart-3: 222 48% 20%;
+    --chart-4: 40 82% 57%;
+    --chart-5: 220 12% 43%;
+    --radius: 0.9rem;
+    --sidebar-background: 222 48% 20%;
+    --sidebar-foreground: 38 33% 97%;
+    --sidebar-primary: 9 76% 59%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 40% 27%;
+    --sidebar-accent-foreground: 38 33% 97%;
+    --sidebar-border: 222 40% 29%;
+    --sidebar-ring: 9 76% 59%;
+  }
+
+  .dark {
+    --background: 222 38% 10%;
+    --foreground: 38 33% 97%;
+    --card: 222 35% 14%;
+    --card-foreground: 38 33% 97%;
+    --popover: 222 35% 14%;
+    --popover-foreground: 38 33% 97%;
+    --primary: 38 33% 97%;
+    --primary-foreground: 222 48% 20%;
+    --secondary: 222 28% 20%;
+    --secondary-foreground: 38 33% 97%;
+    --muted: 222 28% 18%;
+    --muted-foreground: 220 15% 70%;
+    --accent: 9 76% 59%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 42%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 222 25% 25%;
+    --input: 222 25% 28%;
+    --ring: 9 76% 59%;
+    --sidebar-background: 222 48% 8%;
+    --sidebar-foreground: 38 33% 97%;
+    --sidebar-primary: 9 76% 59%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 222 35% 15%;
+    --sidebar-accent-foreground: 38 33% 97%;
+    --sidebar-border: 222 25% 22%;
+    --sidebar-ring: 9 76% 59%;
+  }
+
+  * { @apply border-border; }
+  html { scroll-behavior: smooth; }
+  body { @apply bg-background text-foreground antialiased; font-feature-settings: "ss01"; }
+  ::selection { background: hsl(var(--accent) / 0.2); }
+  :focus-visible { @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background; }
+}
+
+@layer utilities {
+  .text-balance { text-wrap: balance; }
+  .text-pretty { text-wrap: pretty; }
+  .surface-grid { background-image: linear-gradient(hsl(var(--border) / .35) 1px, transparent 1px), linear-gradient(90deg, hsl(var(--border) / .35) 1px, transparent 1px); background-size: 32px 32px; }
+  .animate-in { animation: enter .5s cubic-bezier(.22,1,.36,1) both; }
+  .delay-1 { animation-delay: 80ms; }
+  .delay-2 { animation-delay: 160ms; }
+  .delay-3 { animation-delay: 240ms; }
+}
+
+@keyframes enter { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+
+@media (max-width: 640px) {
+  .container { padding-left: 1rem; padding-right: 1rem; }
+}
+
+@layer components {
+  .dashboard-card { @apply rounded-2xl border bg-card shadow-sm transition-shadow duration-200 hover:shadow-md; }
+  .page-heading { @apply text-balance text-3xl font-semibold tracking-tight sm:text-5xl; }
+}
+
+/* Keep legacy stylesheet imports harmless while app/globals.css remains canonical. */
+.text-balance { text-wrap: balance; }
+.reveal-on-scroll { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
+.reveal-on-scroll.revealed { opacity: 1; transform: translateY(0); }
+.fade-in { animation: enter .5s ease both; }
+@media (prefers-reduced-motion: reduce) { .reveal-on-scroll { opacity: 1; transform: none; transition: none; } }
+
+/* Hide the Netlify HUD badge - we have our own domain */
+netlify-hud{display:none !important}
+[data-netlify-hud],.netlify-badge,#netlify-toast,.nhud-badge,.nhud-container{display:none !important;visibility:hidden !important;opacity:0 !important;pointer-events:none !important;width:0 !important;height:0 !important;position:fixed !important;z-index:-9999 !important;top:-9999px !important;left:-9999px !important}
+[data-netlify-site-id]{display:none !important}
