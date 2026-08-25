@@ -556,6 +556,7 @@ export interface Database {
           status: string
           score: number | null
           feedback: string | null
+          content: string | null
           submitted_at: string | null
           graded_at: string | null
           graded_by: string | null
@@ -569,6 +570,7 @@ export interface Database {
           status?: string
           score?: number | null
           feedback?: string | null
+          content?: string | null
           submitted_at?: string | null
           graded_at?: string | null
           graded_by?: string | null
@@ -582,6 +584,7 @@ export interface Database {
           status?: string
           score?: number | null
           feedback?: string | null
+          content?: string | null
           submitted_at?: string | null
           graded_at?: string | null
           graded_by?: string | null

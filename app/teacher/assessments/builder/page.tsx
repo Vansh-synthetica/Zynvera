@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ArrowLeft, Save, Eye, Clock, Calendar, Settings } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import { ArrowLeft, Save, Eye, Clock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -13,8 +14,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { QuizQuestionBuilder } from '@/components/dnd/quiz-question-builder'
 import type { Question } from '@/components/dnd/quiz-question-builder'
+import { getCoursesByTeacher } from '@/lib/api/courses'
+import { createAssessment, bulkCreateQuestions } from '@/lib/api/assessments'
+import { useWorkspace } from '@/lib/workspace-context'
 
 export default function AssessmentBuilderPage() {
+  const router = useRouter()
+  const { userId } = useWorkspace()
   const [title, setTitle] = useState('')
   const [type, setType] = useState('quiz')
   const [description, setDescription] = useState('')
@@ -23,17 +29,63 @@ export default function AssessmentBuilderPage() {
   const [maxScore, setMaxScore] = useState(100)
   const [maxAttempts, setMaxAttempts] = useState(1)
   const [questions, setQuestions] = useState<Question[]>([])
+  const [courses, setCourses] = useState<any[]>([])
+  const [courseId, setCourseId] = useState<string>('')
   const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
+
+  useEffect(() => {
+    if (!userId) return
+    getCoursesByTeacher(userId)
+      .then(cs => setCourses(cs as any[]))
+      .catch(() => setCourses([]))
+  }, [userId])
 
   const totalPoints = questions.reduce((sum, q) => sum + q.points, 0)
 
-  const handleSave = async () => {
+  const handleSave = async (publish: boolean) => {
+    setError('')
+    if (!courseId) { setError('Select a course for this assessment.'); return }
+    if (!title.trim()) { setError('Give the assessment a title.'); return }
+    if (!questions.length) { setError('Add at least one question.'); return }
+
     setSaving(true)
-    await new Promise(r => setTimeout(r, 1000))
-    setSaving(false)
-    setSaved(true)
-    setTimeout(() => setSaved(false), 2000)
+    try {
+      const created = await createAssessment({
+        course_id: courseId,
+        title: title.trim(),
+        type,
+        description: description.trim() || null,
+        instructions: instructions.trim() || null,
+        duration,
+        max_score: totalPoints || maxScore,
+        max_attempts: maxAttempts,
+        status: publish ? 'active' : 'draft',
+      } as any)
+
+      await bulkCreateQuestions(
+        questions.map((q, i) => {
+          const correctOption = (q.options ?? []).find((o: any) => o.isCorrect)
+          return {
+            assessment_id: (created as any).id,
+            type: q.type,
+            text: q.text,
+            options: (q.options ?? []).map((o: any) => ({ text: o.text })),
+            correct_answer:
+              correctOption?.text ??
+              (q.correctAnswer != null && String(q.correctAnswer).length ? String(q.correctAnswer) : null),
+            points: q.points,
+            order_index: i,
+          }
+        }) as any,
+      )
+
+      router.push('/teacher/assessments')
+    } catch (e: any) {
+      setError(e?.message ?? 'Save failed')
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
@@ -54,27 +106,28 @@ export default function AssessmentBuilderPage() {
           <div className="flex items-center gap-2">
             <Badge variant="outline">{questions.length} questions</Badge>
             <Badge variant="outline">{totalPoints} points</Badge>
-            <Button variant="outline" size="sm" onClick={handleSave} disabled={saving}>
+            <Button variant="outline" size="sm" onClick={() => handleSave(false)} disabled={saving}>
               <Save className="size-4 mr-1" />
-              {saving ? 'Saving...' : saved ? 'Saved!' : 'Save Draft'}
+              {saving ? 'Saving...' : 'Save Draft'}
             </Button>
-            <Button size="sm">
+            <Button size="sm" onClick={() => handleSave(true)} disabled={saving}>
               <Eye className="size-4 mr-1" />
-              Preview
+              {saving ? 'Publishing...' : 'Publish'}
             </Button>
           </div>
         </div>
       </div>
 
       <div className="mx-auto max-w-5xl px-4 py-6">
+        {error && (
+          <div className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+            {error}
+          </div>
+        )}
         <Tabs defaultValue="details">
           <TabsList className="mb-4">
             <TabsTrigger value="details">Assessment Details</TabsTrigger>
             <TabsTrigger value="questions">Questions</TabsTrigger>
-            <TabsTrigger value="settings">
-              <Settings className="size-4 mr-1" />
-              Settings
-            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="details" className="space-y-4">
@@ -85,6 +138,21 @@ export default function AssessmentBuilderPage() {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
+                    <Label>Course</Label>
+                    <Select value={courseId} onValueChange={setCourseId}>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Select course" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {courses.map(c => (
+                          <SelectItem key={c.id} value={c.id}>
+                            {c.code ? `${c.code} — ` : ''}{c.title}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2">
                     <Label htmlFor="title">Title</Label>
                     <Input
                       id="title"
@@ -93,6 +161,8 @@ export default function AssessmentBuilderPage() {
                       placeholder="e.g. Midterm Exam"
                     />
                   </div>
+                </div>
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label>Type</Label>
                     <Select value={type} onValueChange={setType}>
@@ -103,12 +173,22 @@ export default function AssessmentBuilderPage() {
                         <SelectItem value="quiz">Quiz</SelectItem>
                         <SelectItem value="test">Test</SelectItem>
                         <SelectItem value="exam">Exam</SelectItem>
-                        <SelectItem value="practical">Practical</SelectItem>
-                        <SelectItem value="project">Project</SelectItem>
-                        <SelectItem value="oral">Oral</SelectItem>
                         <SelectItem value="homework">Homework</SelectItem>
                       </SelectContent>
                     </Select>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="duration" className="flex items-center gap-1">
+                      <Clock className="size-3" />
+                      Duration (minutes)
+                    </Label>
+                    <Input
+                      id="duration"
+                      type="number"
+                      min={1}
+                      value={duration}
+                      onChange={e => setDuration(parseInt(e.target.value) || 30)}
+                    />
                   </div>
                 </div>
                 <div className="space-y-2">
@@ -131,30 +211,7 @@ export default function AssessmentBuilderPage() {
                     rows={3}
                   />
                 </div>
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="duration" className="flex items-center gap-1">
-                      <Clock className="size-3" />
-                      Duration (minutes)
-                    </Label>
-                    <Input
-                      id="duration"
-                      type="number"
-                      min={1}
-                      value={duration}
-                      onChange={e => setDuration(parseInt(e.target.value) || 30)}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="maxScore">Max Score</Label>
-                    <Input
-                      id="maxScore"
-                      type="number"
-                      min={1}
-                      value={maxScore}
-                      onChange={e => setMaxScore(parseInt(e.target.value) || 100)}
-                    />
-                  </div>
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="maxAttempts">Max Attempts</Label>
                     <Input
@@ -166,6 +223,9 @@ export default function AssessmentBuilderPage() {
                     />
                   </div>
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  Total score is calculated automatically from question points ({totalPoints} pts).
+                </p>
               </CardContent>
             </Card>
           </TabsContent>
@@ -183,37 +243,6 @@ export default function AssessmentBuilderPage() {
                   initialQuestions={questions}
                   onChange={setQuestions}
                 />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          <TabsContent value="settings" className="space-y-4">
-            <Card>
-              <CardHeader>
-                <CardTitle className="text-base">Assessment Settings</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <div>
-                    <p className="text-sm font-medium">Shuffle Questions</p>
-                    <p className="text-xs text-muted-foreground">Randomize question order for each student</p>
-                  </div>
-                  <input type="checkbox" className="size-4" />
-                </div>
-                <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <div>
-                    <p className="text-sm font-medium">Show Answers After Submission</p>
-                    <p className="text-xs text-muted-foreground">Display correct answers when the assessment is graded</p>
-                  </div>
-                  <input type="checkbox" className="size-4" defaultChecked />
-                </div>
-                <div className="flex items-center justify-between p-3 border rounded-lg">
-                  <div>
-                    <p className="text-sm font-medium">Time Limit Enforcement</p>
-                    <p className="text-xs text-muted-foreground">Auto-submit when time runs out</p>
-                  </div>
-                  <input type="checkbox" className="size-4" defaultChecked />
-                </div>
               </CardContent>
             </Card>
           </TabsContent>

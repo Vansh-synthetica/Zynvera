@@ -132,16 +132,15 @@ export async function updateUser(id: string, patch: Tables['users']['Update']) {
 }
 
 export async function searchUsers(institutionId: string, query: string) {
-  const safe = query.replace(/[%_,]/g, m => '\\' + m).trim()
-  if (!safe) return []
-  const { data, error } = await supabase
-    .from('users')
-    .select('id, name, email, role, avatar')
-    .eq('institution_id', institutionId)
-    .or(`name.ilike.%${safe}%,email.ilike.%${safe}%`)
-    .limit(10)
+  // Uses a SECURITY DEFINER RPC: students have no direct SELECT on other
+  // users' rows, so the RPC resolves same-institution staff + classmates
+  // server-side (escaping wildcards internally).
+  if (!query.trim()) return []
+  const { data, error } = await supabase.rpc('search_messageable_users', {
+    p_query: query.trim(),
+  })
   if (error) throw error
-  return data
+  return (data ?? []) as Array<{ id: string; name: string; email: string; role: string; avatar: string | null }>
 }
 
 export async function getUserStats(institutionId: string) {

@@ -129,6 +129,48 @@ export async function gradeSubmission(id: string, score: number, feedback: strin
   if (error) throw error
 
   await supabase.from('submission_history').insert({ submission_id: id, status: 'graded', score, feedback })
+
+  // Sync into grade_entries so the student's Grades page / dashboard average reflect it.
+  try {
+    const sub = data as any
+    const { data: asg } = await supabase
+      .from('assignments')
+      .select('course_id, title, max_score')
+      .eq('id', sub.assignment_id)
+      .single()
+    if (asg) {
+      const maxScore = (asg as any).max_score ?? 100
+      const { data: existing } = await supabase
+        .from('grade_entries')
+        .select('id')
+        .eq('course_id', (asg as any).course_id)
+        .eq('user_id', sub.user_id)
+        .eq('assessment_name', (asg as any).title)
+        .maybeSingle()
+      if (existing) {
+        await supabase
+          .from('grade_entries')
+          .update({ score, max_score: maxScore, feedback, date: new Date().toISOString().slice(0, 10) })
+          .eq('id', (existing as any).id)
+      } else {
+        await supabase.from('grade_entries').insert({
+          course_id: (asg as any).course_id,
+          user_id: sub.user_id,
+          assessment_name: (asg as any).title,
+          assessment_type: 'assignment',
+          score,
+          max_score: maxScore,
+          weight: 1,
+          category: 'Assignments',
+          date: new Date().toISOString().slice(0, 10),
+          feedback,
+        })
+      }
+    }
+  } catch {
+    // Grade sync is best-effort; never fail the grading action itself.
+  }
+
   return data
 }
 

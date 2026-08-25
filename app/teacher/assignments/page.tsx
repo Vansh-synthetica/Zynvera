@@ -56,6 +56,7 @@ import {
   publishAssignment,
   listSubmissions,
 } from '@/lib/api/assignments'
+import { notifyCourseStudents } from '@/lib/api/notifications'
 import { getCoursesByTeacher } from '@/lib/api/courses'
 import { useWorkspace } from '@/lib/workspace-context'
 
@@ -233,6 +234,15 @@ export default function AssignmentsPage() {
           published_at: form.publish ? new Date().toISOString() : null,
         } as any)) as any
         setAssignments(prev => [{ ...created, course_id: form.course_id }, ...prev])
+        if (form.publish) {
+          notifyCourseStudents(form.course_id, {
+            title: 'New assignment',
+            message: `${created.title} has been published${payload.due_date ? ` — due ${new Date(payload.due_date).toLocaleDateString()}` : ''}.`,
+            category: 'assignments',
+            action_url: `/student/assignments/${created.id}`,
+            source: created.course_id,
+          }).catch(() => {})
+        }
       }
       setFormOpen(false)
     } catch (e: any) {
@@ -248,8 +258,16 @@ export default function AssignmentsPage() {
     const willPublish = !isPublished(a)
     setTogglingId(a.id)
     try {
-      if (willPublish) await publishAssignment(a.id)
-      else await updateAssignment(a.id, { status: 'draft', published_at: null })
+      if (willPublish) {
+        await publishAssignment(a.id)
+        notifyCourseStudents((a as any).course_id, {
+          title: 'New assignment',
+          message: `${a.title} has been published. Open it to see the requirements.`,
+          category: 'assignments',
+          action_url: `/student/assignments/${a.id}`,
+          source: (a as any).course_id ?? null,
+        }).catch(() => {})
+      } else await updateAssignment(a.id, { status: 'draft', published_at: null })
 
       setAssignments(prev =>
         prev.map(x =>

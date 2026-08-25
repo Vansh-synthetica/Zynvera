@@ -222,32 +222,24 @@ export async function requestChildLink(input: {
   familyCode: string
   relationship?: string
 }) {
-  const ident = input.childIdentifier.trim().toLowerCase()
-  const isUuid = /^[0-9a-f-]{36}$/i.test(ident)
-
-  // Look up the student by email or id.
-  let query = supabase.from('users').select('id, role, family_code').eq('role', 'student')
-  query = isUuid ? query.eq('id', ident) : query.eq('email', ident)
-  const { data: student, error: findError } = await query.maybeSingle()
+  // Server-side lookup via SECURITY DEFINER RPC so the parent never needs
+  // (and never gets) broad read access to student rows. The RPC verifies
+  // BOTH the identifier and the family code before returning anything.
+  const { data: matches, error: findError } = await supabase
+    .rpc('find_linkable_student', {
+      p_identifier: input.childIdentifier.trim(),
+      p_family_code: input.familyCode.trim(),
+    })
+    .select()
   if (findError) throw findError
-  if (!student) throw new Error('No student found with that email/ID.')
-
-  if (!student.family_code || student.family_code.toUpperCase() !== input.familyCode.trim().toUpperCase()) {
-    throw new Error('Family code does not match this student.')
-  }
-
-  // Institution for the link row comes from the student's profile.
-  const { data: full } = await supabase
-    .from('users')
-    .select('institution_id')
-    .eq('id', student.id)
-    .single()
+  const student = (matches as any[] | null)?.[0]
+  if (!student) throw new Error('No student found with that email/ID — check the email and family code.')
 
   const { data, error } = await supabase
     .from('parent_links')
     .upsert(
       {
-        institution_id: full?.institution_id as any,
+        institution_id: student.institution_id as any,
         parent_user_id: input.parentUserId,
         student_user_id: student.id,
         relationship: input.relationship ?? 'guardian',
