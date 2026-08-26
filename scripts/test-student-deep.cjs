@@ -231,10 +231,9 @@ async function loginClient(email, password) {
     const { data: leakMsgs } = await st("messages").select("*").eq("recipient_id", mateId);
     ok("SEC4 cannot read classmate's messages", !(leakMsgs ?? []).length);
 
-    // Cross-institution: course ROW is public-catalog (approved institutions)
+    // Cross-institution: NOTHING from the other school is visible
     const { data: xCourse } = await B.admin.from("courses").select("id").eq("id", courseId).maybeSingle();
-    ok("SEC5a foreign course row visible (catalog)", !!xCourse);
-    // ...but NO foreign data leaks through it
+    ok("SEC5a foreign course invisible (full tenant privacy)", !xCourse, JSON.stringify(xCourse?.id));
     const { data: xEnr } = await B.admin.from("course_enrolments").select("*").eq("course_id", courseId);
     const { data: xAsg } = await B.admin.from("assignments").select("*").eq("course_id", courseId);
     const { data: xGrades } = await B.admin.from("grade_entries").select("*").eq("course_id", courseId);
