@@ -20,12 +20,21 @@ const { createClient } = require("@supabase/supabase-js");
 // Service-level cleanup immune to RLS/persona quirks (test hygiene only).
 async function sqlWipe() {
   const mgmt = process.env.SUPABASE_MGMT;
-  if (!mgmt) return; // skip service-level wipe when token not provided
-  await fetch(`https://api.supabase.com/v1/projects/${env.SUPABASE_PROJECT || "ccqfhsfkhrkbpczmuolp"}/database/query`, {
+  if (!mgmt) {
+    console.log("  [sqlWipe] Skipped: SUPABASE_MGMT not set");
+    return;
+  }
+  const res = await fetch(`https://api.supabase.com/v1/projects/${env.SUPABASE_PROJECT || "ccqfhsfkhrkbpczmuolp"}/database/query`, {
     method: "POST",
     headers: { Authorization: `Bearer ${mgmt}`, "Content-Type": "application/json" },
     body: JSON.stringify({ query: "DELETE FROM parent_links; DELETE FROM notifications WHERE title='New assignment';" }),
   });
+  if (!res.ok) {
+    const err = await res.text();
+    console.error(`  [sqlWipe] Failed: ${res.status} ${err}`);
+  } else {
+    console.log("  [sqlWipe] Cleaned parent_links and test notifications");
+  }
 }
 
 let passCount = 0, failCount = 0;
@@ -326,13 +335,12 @@ const table = (c) => (t) => c.from(t);
   const child = (fl.data ?? [])[0];
   ok("P1 resolve child via family code + email", !fl.error && !!child && child.id === sId, fl.error?.message || JSON.stringify(fl.data));
 
-  // Remove leftovers from previous runs so upsert starts clean
+// Remove leftovers from previous runs so insert starts clean
   await sqlWipe();
-
-  const { data: link, error: plErr } = await pt("parent_links").upsert({
+  const { data: link, error: plErr } = await pt("parent_links").insert({
     institution_id: child.institution_id, parent_user_id: pId, student_user_id: child.id,
     relationship: "guardian", status: "pending", requested_at: new Date().toISOString(),
-  }, { onConflict: "parent_user_id,student_user_id" }).select().single();
+  }).select().single();
   ok("P2 request link (pending)", !!link && !plErr, plErr?.message);
   console.log(`    [dbg] link=${JSON.stringify(link)}`);
 
@@ -393,3 +401,4 @@ const table = (c) => (t) => c.from(t);
     process.exit(1);
   }
 })();
+
