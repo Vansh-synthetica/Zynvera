@@ -91,7 +91,7 @@ export async function getStudentCourses(userId: string) {
     .eq('status', 'active')
   if (e1) throw e1
 
-  const courseIds = enrollments.map(e => e.course_id)
+  const courseIds = enrollments.map((e: any) => e.course_id)
   if (!courseIds.length) return []
 
   const { data, error } = await supabase
@@ -151,6 +151,18 @@ export async function getUserStats(institutionId: string) {
   if (error) throw error
 
   const stats: Record<string, number> = {}
-  data.forEach(u => { stats[u.role] = (stats[u.role] || 0) + 1 })
+  data.forEach((u: any) => { stats[u.role] = (stats[u.role] || 0) + 1 })
   return { total: data.length, byRole: stats }
+}
+
+export async function bulkImportStudents(rows: Array<{ email: string; name?: string }>): Promise<{
+  created: number;
+  skipped: number;
+  credentials: Array<{ email: string; password: string; family_code: string }>;
+}> {
+  const { data, error } = await supabase.rpc('bulk_import_students', {
+    p_rows: rows,
+  })
+  if (error) throw error
+  return data as { created: number; skipped: number; credentials: Array<{ email: string; password: string; family_code: string }> }
 }
