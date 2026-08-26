@@ -9,6 +9,7 @@ import {
   Award,
   Target,
   ClipboardList,
+  Receipt,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Card, CardContent } from '@/components/ui/card'
@@ -21,6 +22,7 @@ import {
 } from '@/lib/api/attendance'
 import { getCoursesByStudent } from '@/lib/api/courses'
 import { getAssignmentsDueSoon } from '@/lib/queries'
+import { FeeStatus } from '@/components/fee-status'
 import { percentToLetter } from '@/lib/grading/calculate'
 import { cn } from '@/lib/utils'
 
@@ -224,6 +226,14 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
             )}
           </CardContent>
         </Card>
+
+        {/* Fees — same board the child sees */}
+        <div className="space-y-2">
+          <h2 className="text-sm font-semibold flex items-center gap-2 px-1">
+            <Receipt className="size-4" /> Fee status
+          </h2>
+          <FeeStatus studentUserId={params.id} />
+        </div>
       </div>
     </AppShell>
   )

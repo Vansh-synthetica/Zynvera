@@ -292,6 +292,17 @@ const svc0 = async (q) => {
   const stuGen = await S.admin.rpc("generate_fee_invoices", { p_structure_id: fs1.id });
   ok("FEE10 student blocked from generating", !!stuGen.error, stuGen.error?.message || "expected error");
 
+  // ── SHARED BOARD: student & parent see identical data ─────────
+  const boardSel = 'id,title,amount,status,due_date,fee_payments(amount,method,paid_on)';
+  const sBoard = await S.admin.from("fee_invoices").select(boardSel).eq("student_user_id", sId);
+  const pBoard = await P.admin.from("fee_invoices").select(boardSel).eq("student_user_id", sId);
+  const norm = (rows) => (rows ?? []).map(r => ({ id: r.id, status: r.status, amount: String(r.amount), pays: r.fee_payments.length })).sort((a,b)=>a.id.localeCompare(b.id));
+  ok("FEE11 student board loads with payment history", (sBoard.data ?? []).some(r => r.id === myInv.id && r.fee_payments?.length === 2));
+  ok("FEE12 parent sees IDENTICAL board for child", JSON.stringify(norm(sBoard.data)) === JSON.stringify(norm(pBoard.data)),
+     `s=${JSON.stringify(norm(sBoard.data))} p=${JSON.stringify(norm(pBoard.data))}`);
+  const { data: invNotifs } = await t("notifications").select("*").eq("user_id", sId).like("source", `${myInv.id}`);
+  ok("FEE13 invoice generation notified student", (invNotifs ?? []).length === 1 && /Fee due|New fee invoice/.test(invNotifs[0].title));
+
   // Payroll: set teacher salary, run month, mark paid → expense posted
   const { data: sal } = await ad("staff_salaries").upsert({
     staff_user_id: tId, institution_id: inst, monthly_amount: 45000, active: true,

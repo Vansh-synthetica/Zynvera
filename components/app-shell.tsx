@@ -10,7 +10,7 @@ import {
   FileText, BarChart3, MessageSquare, Users, Megaphone, Video, HelpCircle,
   Settings, Bell, ChevronLeft, ChevronRight, LogOut, Search, Plus,
   Menu, X, Building2, ChevronDown, FolderOpen, AlertTriangle, Award,
-  Home, Target, TrendingUp, BookMarked, MessagesSquare, Zap, Link2, KeyRound, CalendarClock
+  Home, Target, TrendingUp, BookMarked, MessagesSquare, Zap, Link2, KeyRound, CalendarClock, Wallet
 } from 'lucide-react'
 import { useWorkspace } from '@/lib/workspace-context'
 import { getUnreadCount } from '@/lib/api/notifications'
@@ -34,6 +34,7 @@ const mainNav: NavItem[] = [
   { label: 'Resources', href: '/student/resources', icon: FolderOpen, roles: ['student'] },
   { label: 'People', href: '/student/people', icon: Users, roles: ['student'] },
   { label: 'Analytics', href: '/student/analytics', icon: BarChart3, roles: ['student'] },
+  { label: 'Fee Status', href: '/student/fees', icon: Wallet, roles: ['student'] },
   { label: 'Reports', href: '/student/reports', icon: FileText, roles: ['student'] },
   { label: 'Family Code', href: '/student/family-code', icon: KeyRound, roles: ['student'] },
   // Teacher routes
