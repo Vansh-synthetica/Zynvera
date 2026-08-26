@@ -114,7 +114,11 @@ export async function getSubmission(assignmentId: string, userId: string) {
 }
 
 export async function upsertSubmission(sub: Tables['submissions']['Insert']) {
-  const { data, error } = await supabase.from('submissions').upsert(sub).select().single()
+  const { data, error } = await supabase
+    .from('submissions')
+    .upsert(sub, { onConflict: 'assignment_id,user_id' })
+    .select()
+    .single()
   if (error) throw error
   return data
 }
