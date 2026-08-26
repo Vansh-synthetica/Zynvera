@@ -254,8 +254,63 @@ const svc0 = async (q) => {
     ok(`LIVE ${p}`, rr.status === 200 && !/application error/i.test(html), String(rr.status));
   }
 
-  // ── CLEANUP ────────────────────────────────────────────────────
-  console.log("\n══ CLEANUP ══");
+  // ── FEES & PAYROLL (real money flows) ─────────────────────────
+  console.log("\n══ FEES & PAYROLL ══");
+  const { data: fs1 } = await ad("fee_structures").insert({
+    institution_id: inst, name: `Term Fee ${stamp}`, amount: 12000, frequency: "termly",
+  }).select().single();
+  ok("FEE1 create fee structure", !!fs1 && !fs1Err(), fs1?.message || "");
+  function fs1Err() { return null; }
+
+  const gen = await A.admin.rpc("generate_fee_invoices", {
+    p_structure_id: fs1.id,
+    p_due_date: new Date(Date.now() + 15 * 86_400_000).toISOString().slice(0, 10),
+  });
+  ok("FEE2 invoices generated for all students", !gen.error && Number(gen.data) >= 1, `${gen.error?.message} n=${gen.data}`);
+  const gen2 = await A.admin.rpc("generate_fee_invoices", { p_structure_id: fs1.id });
+  ok("FEE3 re-generate creates no duplicates", Number(gen2.data) === 0, `n=${gen2.data}`);
+
+  const { data: invList } = await ad("fee_invoices").select("*").eq("fee_structure_id", fs1.id);
+  const myInv = (invList ?? []).find(i => i.student_user_id === sId);
+  ok("FEE4 invoice exists for enrolled student", !!myInv && Number(myInv.amount) === 12000);
+
+  // partial then full payment; each posts income to the ledger
+  const payA = await A.admin.rpc("record_fee_payment", { p_invoice_id: myInv.id, p_amount: 5000, p_method: "upi" });
+  ok("FEE5 partial payment -> status partial", payA.data === "partial", JSON.stringify(payA.data) + payA.error?.message);
+  const payB = await A.admin.rpc("record_fee_payment", { p_invoice_id: myInv.id, p_amount: 7000, p_method: "cash" });
+  ok("FEE6 remainder -> status paid", payB.data === "paid", JSON.stringify(payB.data));
+  const { data: invAfter } = await ad("fee_invoices").select("status").eq("id", myInv.id).single();
+  ok("FEE7 invoice marked paid", invAfter?.status === "paid");
+  const { count: feeTxCount } = await ad("finance_transactions").select("*", { count: "exact", head: true })
+    .eq("institution_id", inst).eq("category", "Fees").like("description", `Fee payment:%Term Fee ${stamp}`);
+  ok("FEE8 both payments auto-posted to ledger", feeTxCount === 2, `count=${feeTxCount}`);
+
+  // student sees own invoice; blocked from generating
+  const S = await loginClient("student@zynvera.app", "Student#2026!x");
+  const { data: ownInv } = await S.admin.from("fee_invoices").select("status").eq("id", myInv.id).maybeSingle();
+  ok("FEE9 student sees own paid invoice", ownInv?.status === "paid");
+  const stuGen = await S.admin.rpc("generate_fee_invoices", { p_structure_id: fs1.id });
+  ok("FEE10 student blocked from generating", !!stuGen.error, stuGen.error?.message || "expected error");
+
+  // Payroll: set teacher salary, run month, mark paid → expense posted
+  const { data: sal } = await ad("staff_salaries").upsert({
+    staff_user_id: tId, institution_id: inst, monthly_amount: 45000, active: true,
+  }, { onConflict: "staff_user_id" }).select().single();
+  ok("PAY1 set staff salary", !!sal && Number(sal.monthly_amount) === 45000);
+  const month = todayStr().slice(0, 8) + "01";
+  await svc0(`DELETE FROM payroll_runs WHERE institution_id='${inst}' AND month='${month}'`);
+  const run = await A.admin.rpc("run_payroll", { p_month: month });
+  ok("PAY2 run payroll for month", !run.error && /^[0-9a-f-]{36}$/i.test(String(run.data)), run.error?.message || String(run.data));
+  const runId = String(run.data);
+  const dupRun = await A.admin.rpc("run_payroll", { p_month: month });
+  ok("PAY3 duplicate month blocked", !!dupRun.error, dupRun.error?.message || "expected error");
+  const paid = await A.admin.rpc("pay_payroll", { p_run_id: runId });
+  ok("PAY4 mark paid posts total expense", !paid.error && Number(paid.data) === 45000, JSON.stringify(paid.data));
+  const { data: salTx } = await ad("finance_transactions").select("*")
+    .eq("institution_id", inst).eq("category", "Salaries").ilike("description", "%Payroll%");
+  ok("PAY5 salary expense in ledger", (salTx ?? []).some(x => Number(x.amount) === 45000));
+
+
   const MGMT = process.env.SUPABASE_MGMT;
   const svc = svc0;
   await svc(`DELETE FROM courses WHERE code LIKE 'PR-${stamp}'`);
@@ -265,6 +320,11 @@ const svc0 = async (q) => {
   await svc(`DELETE FROM finance_budgets WHERE category='Technology' AND fiscal_year='2026-27'`);
   await svc(`DELETE FROM departments WHERE name LIKE '%${stamp}'`);
   await svc(`DELETE FROM grade_entries WHERE assessment_name LIKE '%${stamp}'`);
+  await svc(`DELETE FROM finance_transactions WHERE description LIKE '%${stamp}%' OR description LIKE '%Payroll%'`);
+  await svc(`DELETE FROM payroll_runs WHERE institution_id='${inst}'`);
+  await svc(`DELETE FROM staff_salaries WHERE institution_id='${inst}'`);
+  await svc(`DELETE FROM fee_invoices WHERE fee_structure_id='${fs1?.id ?? ""}'`);
+  await svc(`DELETE FROM fee_structures WHERE id='${fs1?.id ?? ""}'`);
   console.log("  cleaned");
 
   console.log(`\n${"═".repeat(48)}`);
