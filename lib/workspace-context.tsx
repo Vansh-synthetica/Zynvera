@@ -9,6 +9,7 @@ type WorkspaceContextType = {
   setWorkspace: (w: Workspace) => void
   clearWorkspace: () => void
   institution: typeof institutions[0] | null
+  institutionId: string | null
   term: typeof academicTerms[0] | null
   role: UserRole
   setRole: (role: UserRole) => void
@@ -104,7 +105,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
   return (
     <WorkspaceContext.Provider value={{
       workspace, setWorkspace, clearWorkspace,
-      institution, term,
+      institution,
+      institutionId: workspace?.institutionId ?? null,
+      term,
       role: workspace?.role ?? 'student',
       setRole, userName: workspace?.userName ?? currentUser.name, setUserName,
       userId: workspace?.userId ?? null,

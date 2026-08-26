@@ -9,6 +9,7 @@ import {
   CheckCircle2,
   Plus,
   BellRing,
+  AlertCircle,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Card, CardContent } from '@/components/ui/card'
