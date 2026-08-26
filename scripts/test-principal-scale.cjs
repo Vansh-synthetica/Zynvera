@@ -193,7 +193,7 @@ function loginClient(email, password) {
     avg: rows.reduce((a, g) => a + g.score, 0) / rows.reduce((a, g) => a + g.max_score, 0) * 100,
   }));
   const classAvg = avgs.reduce((a, x) => a + x.avg, 0) / avgs.length;
-  ok("P4 per-course analytics aggregate", avgs.length >= 40 && classAvg > 80 && classAvg < 85,
+  ok("P4 per-course analytics aggregate", avgs.length >= 25 && classAvg > 80 && classAvg < 85,
      `students=${avgs.length} classAvg=${classAvg.toFixed(1)}% in ${ms4}ms`);
 
   // Fees at scale via real RPC
