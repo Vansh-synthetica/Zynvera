@@ -29,6 +29,8 @@ import {
   createAnnouncement,
   pinAnnouncement,
   deleteAnnouncement,
+  reorderAnnouncements,
+  broadcastAnnouncement,
 } from '@/lib/api/announcements'
 import { useWorkspace } from '@/lib/workspace-context'
 
@@ -46,6 +48,7 @@ export default function PrincipalAnnouncementsPage() {
   const [content, setContent] = useState('')
   const [priority, setPriority] = useState('normal')
   const [busy, setBusy] = useState(false)
+  const [info, setInfo] = useState('')
 
   const load = useCallback(async () => {
     if (!institutionId) return
@@ -80,22 +83,46 @@ export default function PrincipalAnnouncementsPage() {
     setBusy(true)
     setError('')
     try {
-      await createAnnouncement({
+      const created = await createAnnouncement({
         institution_id: institutionId,
         author_id: userId,
         title: title.trim(),
         content: content.trim(),
         priority,
       })
+      // Push it to every member's notification bell (deduped server-side).
+      let notified = 0
+      try {
+        notified = await broadcastAnnouncement((created as any).id)
+      } catch {
+        // announcement is still published even if fan-out fails
+      }
       setOpen(false)
       setTitle('')
       setContent('')
       setPriority('normal')
+      setInfo(
+        notified > 0
+          ? `Published — ${notified} member${notified === 1 ? '' : 's'} notified.`
+          : 'Published.',
+      )
+      setTimeout(() => setInfo(''), 4000)
       load()
     } catch (e: any) {
       setError(e?.message ?? 'Publish failed')
     } finally {
       setBusy(false)
+    }
+  }
+
+  const handleReorder = async (next: Announcement[]) => {
+    // Optimistic local move, then persist; reload on failure.
+    setAnnouncements(next)
+    try {
+      await reorderAnnouncements(next.map(a => a.id))
+    } catch (e: any) {
+      setError(e?.message ?? 'Reorder failed')
+      load()
     }
   }
 
@@ -138,6 +165,12 @@ export default function PrincipalAnnouncementsPage() {
         <Badge variant="outline">{filtered.length}</Badge>
       </div>
 
+      {info && (
+        <div className="flex items-center gap-2 rounded-lg border border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950 p-3 text-sm text-green-700 dark:text-green-400">
+          <Megaphone className="size-4 shrink-0" /> {info}
+        </div>
+      )}
+
       <Card>
         <CardHeader>
           <CardTitle className="text-base flex items-center gap-2">
@@ -160,7 +193,7 @@ export default function PrincipalAnnouncementsPage() {
           ) : (
             <SortableAnnouncements
               announcements={filtered}
-              onReorder={setAnnouncements}
+              onReorder={handleReorder}
               onPin={async id => {
                 const target = announcements.find(a => a.id === id)
                 if (!target) return

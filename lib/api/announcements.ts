@@ -12,6 +12,7 @@ export async function listAnnouncements(institutionId: string) {
     .select('*, users!announcements_author_id_fkey(name,avatar)')
     .eq('institution_id', institutionId)
     .order('pinned', { ascending: false })
+    .order('sort_order', { ascending: true })
     .order('published_at', { ascending: false })
   if (error) throw error
   return data
@@ -23,6 +24,7 @@ export async function listCourseAnnouncements(courseId: string) {
     .select('*, users!announcements_author_id_fkey(name,avatar)')
     .eq('course_id', courseId)
     .order('pinned', { ascending: false })
+    .order('sort_order', { ascending: true })
     .order('published_at', { ascending: false })
   if (error) throw error
   return data
@@ -64,4 +66,24 @@ export async function pinAnnouncement(id: string, pinned: boolean) {
     .single()
   if (error) throw error
   return data
+}
+
+/**
+ * Persist the principal's drag-to-reorder across the whole list.
+ * @param ids announcement ids in their new display order
+ */
+export async function reorderAnnouncements(ids: string[]) {
+  const { error } = await supabase.rpc('reorder_announcements', { p_ids: ids })
+  if (error) throw error
+}
+
+/**
+ * Fan the announcement out as notifications to every institution member.
+ * Deduped server-side per announcement — safe to call more than once.
+ * @returns number of members notified
+ */
+export async function broadcastAnnouncement(id: string): Promise<number> {
+  const { data, error } = await supabase.rpc('announce_institution', { p_announcement_id: id })
+  if (error) throw error
+  return Number(data ?? 0)
 }

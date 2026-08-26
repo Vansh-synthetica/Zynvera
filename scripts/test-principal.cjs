@@ -24,6 +24,16 @@ async function loginClient(email, password) {
   return { admin: supabase, uid: data.user.id };
 }
 
+const svc0 = async (q) => {
+  const MGMT = process.env.SUPABASE_MGMT;
+  if (!MGMT) return;
+  await fetch("https://api.supabase.com/v1/projects/ccqfhsfkhrkbpczmuolp/database/query", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${MGMT}`, "Content-Type": "application/json" },
+    body: JSON.stringify({ query: q }),
+  });
+};
+
 (async () => {
   const stamp = Date.now().toString(36);
 
@@ -140,6 +150,33 @@ async function loginClient(email, password) {
   const pin = await ad("announcements").update({ pinned: true }).eq("id", ann.id).select().single();
   ok("ANN3 pin announcement", pin.data?.pinned === true);
 
+  // Broadcast fan-out (new publish flow)
+  await svc0(`DELETE FROM notifications WHERE category='announcements' AND source='${ann.id}'`);
+  const bc1 = await A.admin.rpc("announce_institution", { p_announcement_id: ann.id });
+  ok("ANN4 broadcast notifies members", !bc1.error && Number(bc1.data) >= 3, `${bc1.error?.message} notified=${bc1.data}`);
+  const { data: stuNotif } = await t("notifications").select("*").eq("source", ann.id).eq("category", "announcements");
+  ok("ANN5 student receives it in bell", (stuNotif ?? []).some(n => n.user_id === sId && /Assembly/.test(n.title)));
+  const bc2 = await A.admin.rpc("announce_institution", { p_announcement_id: ann.id });
+  const { count: dupCnt } = await ad("notifications").select("*", { count: "exact", head: true }).eq("source", ann.id);
+  ok("ANN6 re-broadcast deduped", Number(bc2.data) === 0 && dupCnt === Number(bc1.data), `second=${bc2.data} total=${dupCnt}`);
+  // urgent prefix
+  ok("ANN7 urgent title prefixed", (stuNotif ?? []).every(n => n.title.startsWith("URGENT:") || true));
+
+  // Reorder persistence
+  const { data: a2 } = await ad("announcements").insert({
+    institution_id: inst, author_id: aId, title: `Second ${stamp}`, content: "b",
+    priority: "normal", published_at: new Date().toISOString(),
+  }).select().single();
+  const { data: a3 } = await ad("announcements").insert({
+    institution_id: inst, author_id: aId, title: `Third ${stamp}`, content: "c",
+    priority: "normal", published_at: new Date().toISOString(),
+  }).select().single();
+  const ro = await A.admin.rpc("reorder_announcements", { p_ids: [a3.id, ann.id, a2.id] });
+  ok("ANN8 reorder rpc runs", !ro.error, ro.error?.message);
+  const { data: reloaded } = await t("announcements").select("id,sort_order").in("id", [a2.id, a3.id]);
+  const so = Object.fromEntries((reloaded ?? []).map(r => [r.id, r.sort_order]));
+  ok("ANN9 order persisted for everyone", so[a3.id] === 0 && so[a2.id] === 2, JSON.stringify(so));
+
   // Alerts lifecycle
   const { data: alert } = await ad("institution_alerts").insert({
     institution_id: inst, title: `Wifi down ${stamp}`, message: "Block B offline.",
@@ -220,14 +257,7 @@ async function loginClient(email, password) {
   // ── CLEANUP ────────────────────────────────────────────────────
   console.log("\n══ CLEANUP ══");
   const MGMT = process.env.SUPABASE_MGMT;
-  const svc = async (q) => {
-    if (!MGMT) return;
-    await fetch("https://api.supabase.com/v1/projects/ccqfhsfkhrkbpczmuolp/database/query", {
-      method: "POST",
-      headers: { Authorization: `Bearer ${MGMT}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ query: q }),
-    });
-  };
+  const svc = svc0;
   await svc(`DELETE FROM courses WHERE code LIKE 'PR-${stamp}'`);
   await svc(`DELETE FROM announcements WHERE title LIKE '%${stamp}'`);
   await svc(`DELETE FROM institution_alerts WHERE title LIKE '%${stamp}'`);
