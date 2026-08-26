@@ -75,10 +75,21 @@ export function googleConfigured(): boolean {
   return Boolean(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET)
 }
 
-export function buildConsentUrl(state: string): string {
+/**
+ * Base URL used for the OAuth redirect_uri. Prefers NEXT_PUBLIC_APP_URL;
+ * falls back to the incoming request's own origin so localhost dev and
+ * production both work without extra config.
+ */
+export function appBaseUrl(requestOrigin?: string): string {
+  const base = process.env.NEXT_PUBLIC_APP_URL || requestOrigin
+  if (!base) throw new Error('APP URL unavailable')
+  return base.replace(/\/$/, '')
+}
+
+export function buildConsentUrl(state: string, base: string): string {
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CLIENT_ID!,
-    redirect_uri: `${process.env.NEXT_PUBLIC_APP_URL}/api/google/callback`,
+    redirect_uri: `${base}/api/google/callback`,
     response_type: 'code',
     scope: `${DRIVE_FILE_SCOPE} https://www.googleapis.com/auth/userinfo.email`,
     access_type: 'offline',
