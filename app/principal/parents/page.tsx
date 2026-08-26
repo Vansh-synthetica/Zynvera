@@ -40,6 +40,7 @@ import {
   linkParent,
 } from '@/lib/api/institution'
 import { listUsers } from '@/lib/api/students'
+import { useWorkspace } from '@/lib/workspace-context'
 
 type LinkRow = {
   id: string
