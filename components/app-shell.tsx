@@ -10,7 +10,7 @@ import {
   FileText, BarChart3, MessageSquare, Users, Megaphone, Video, HelpCircle,
   Settings, Bell, ChevronLeft, ChevronRight, LogOut, Search, Plus,
   Menu, X, Building2, ChevronDown, FolderOpen, AlertTriangle, Award,
-  Home, Target, TrendingUp, BookMarked, MessagesSquare, Zap, Link2, KeyRound
+  Home, Target, TrendingUp, BookMarked, MessagesSquare, Zap, Link2, KeyRound, CalendarClock
 } from 'lucide-react'
 import { useWorkspace } from '@/lib/workspace-context'
 import { getUnreadCount } from '@/lib/api/notifications'
@@ -37,6 +37,7 @@ const mainNav: NavItem[] = [
   { label: 'Reports', href: '/student/reports', icon: FileText, roles: ['student'] },
   { label: 'Family Code', href: '/student/family-code', icon: KeyRound, roles: ['student'] },
   // Teacher routes
+  { label: 'Today', href: '/teacher/today', icon: CalendarClock, roles: ['teacher'] },
   { label: 'Teacher Dashboard', href: '/teacher/dashboard', icon: LayoutDashboard, roles: ['teacher'] },
   { label: 'My Courses', href: '/teacher/courses', icon: BookOpen, roles: ['teacher'] },
   { label: 'My Classes', href: '/teacher/classes', icon: Users, roles: ['teacher'] },
@@ -276,7 +277,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <nav className="fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur lg:hidden print:hidden">
         <div className="flex items-center justify-around py-2">
           {(role === 'teacher' ? [
-            { label: 'Dashboard', href: '/teacher/dashboard', icon: Home },
+            { label: 'Today', href: '/teacher/today', icon: CalendarClock },
             { label: 'Courses', href: '/teacher/courses', icon: BookOpen },
             { label: 'Gradebook', href: '/teacher/gradebook', icon: Award },
             { label: 'Students', href: '/teacher/students', icon: Users },

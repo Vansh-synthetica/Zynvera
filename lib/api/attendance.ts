@@ -46,6 +46,32 @@ export async function bulkMarkAttendance(records: Tables['attendance_records']['
   return data
 }
 
+export type AttendanceSaveResult = {
+  saved: number
+  absent: number
+  late: number
+  alerts_sent: number
+}
+
+/**
+ * One-call register save (teacher daily flow): atomically replaces the day's
+ * register for a section and auto-notifies absent/late students plus their
+ * approved parents. Returns counts so the UI can confirm what happened.
+ */
+export async function saveRegister(
+  sectionId: string,
+  date: string,
+  records: Array<{ user_id: string; status: 'present' | 'absent' | 'late' | 'excused' | 'unexplained' }>,
+): Promise<AttendanceSaveResult> {
+  const { data, error } = await supabase.rpc('teacher_save_attendance', {
+    p_section_id: sectionId,
+    p_date: date,
+    p_records: records,
+  })
+  if (error) throw error
+  return (data ?? { saved: 0, absent: 0, late: 0, alerts_sent: 0 }) as AttendanceSaveResult
+}
+
 export async function updateAttendance(id: string, patch: Partial<Tables['attendance_records']['Update']>) {
   const { data, error } = await supabase.from('attendance_records').update(patch).eq('id', id).select().single()
   if (error) throw error

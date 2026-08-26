@@ -1,7 +1,8 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState, Suspense } from 'react'
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 import {
   Save,
   Loader2,
@@ -30,7 +31,7 @@ import { listClassSections } from '@/lib/api/classes'
 import { listEnrolments } from '@/lib/api/students'
 import {
   listAttendance,
-  bulkMarkAttendance,
+  saveRegister,
 } from '@/lib/api/attendance'
 import { useWorkspace } from '@/lib/workspace-context'
 
@@ -52,11 +53,20 @@ const STATUSES: { key: StatusKey; label: string; cls: string }[] = [
 ]
 
 export default function AttendancePage() {
+  return (
+    <Suspense>
+      <AttendanceInner />
+    </Suspense>
+  )
+}
+
+function AttendanceInner() {
   const { userId } = useWorkspace()
+  const searchParams = useSearchParams()
 
   const [sections, setSections] = useState<Section[]>([])
-  const [sectionId, setSectionId] = useState('')
-  const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10))
+  const [sectionId, setSectionId] = useState(() => searchParams.get('section') ?? '')
+  const [date, setDate] = useState(() => searchParams.get('date') ?? new Date().toISOString().slice(0, 10))
   const [roster, setRoster] = useState<RosterStudent[]>([])
   const [marks, setMarks] = useState<Record<string, StatusKey>>({})
   const [existingIds, setExistingIds] = useState<Set<string>>(new Set())
@@ -185,11 +195,8 @@ export default function AttendancePage() {
 
     // Default unmarked students to present for a complete register.
     const records = roster.map(s => ({
-      class_section_id: section.id,
       user_id: s.userId,
-      date,
       status: marks[s.userId] ?? ('present' as StatusKey),
-      recorded_by: userId,
     }))
     if (records.length === 0) return
 
@@ -197,15 +204,19 @@ export default function AttendancePage() {
     setPageError('')
     setSavedMsg('')
     try {
-      await bulkMarkAttendance(records as any)
+      const result = await saveRegister(section.id, date, records)
 
       // Refresh stored ids so switches reflect saved state.
       const refreshed = await listAttendance(section.id, date)
       setExistingIds(new Set(((refreshed as any[]) ?? []).map(r => r.id)))
 
+      const alertBits: string[] = []
+      if (result.absent > 0) alertBits.push(`${result.absent} absent`)
+      if (result.late > 0) alertBits.push(`${result.late} late`)
       setSavedMsg(
-        `Register saved for ${records.length} student${records.length === 1 ? '' : 's'}` +
-          (notified > 0 ? ` · ${notified} absence alert${notified === 1 ? '' : 's'} sent` : ''),
+        `Register saved for ${result.saved} student${result.saved === 1 ? '' : 's'}` +
+          (alertBits.length ? ` (${alertBits.join(', ')})` : '') +
+          (result.alerts_sent > 0 ? ` · ${result.alerts_sent} alert${result.alerts_sent === 1 ? '' : 's'} sent` : ''),
       )
       loadHistory()
     } catch (e: any) {
