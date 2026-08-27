@@ -12,7 +12,6 @@ import {
   Receipt,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
-import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { getUser } from '@/lib/api/students'
 import { getStudentAverage, listGradesByStudent } from '@/lib/api/grades'
@@ -42,7 +41,6 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
       setLoading(true)
       setError('')
 
-      // Profile is readable if we're linked (RLS enforces).
       let name = 'Student'
       try {
         const u = await getUser(params.id)
@@ -61,7 +59,6 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
         getStudentAttendance(params.id).catch(() => []),
       ])
 
-      // Upcoming assignments via child's courses.
       let dues: any[] = []
       try {
         const cs = await getCoursesByStudent(params.id)
@@ -90,8 +87,8 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
   if (loading) {
     return (
       <AppShell>
-        <div className="flex items-center justify-center py-24 text-muted-foreground">
-          <Loader2 className="size-5 animate-spin mr-2" /> Loading record…
+        <div className="flex items-center justify-center py-16 text-muted-foreground">
+          <Loader2 className="size-5 animate-spin mr-2" /> Loading record...
         </div>
       </AppShell>
     )
@@ -129,105 +126,97 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
 
         {/* Summary */}
         <div className="grid grid-cols-2 gap-3">
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Award className="size-4 mx-auto text-muted-foreground" />
-              <p className="text-xs text-muted-foreground mt-1 uppercase">Overall grade</p>
-              <p className="text-2xl font-bold">{avg?.count ? `${avg.average}%` : '—'}</p>
-              {avg?.count ? <Badge variant="outline">{percentToLetter(avg.average)}</Badge> : null}
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 text-center">
-              <Target className="size-4 mx-auto text-muted-foreground" />
-              <p className="text-xs text-muted-foreground mt-1 uppercase">Attendance</p>
-              <p className={cn(
-                'text-2xl font-bold',
-                attSum?.total ? (attSum.rate >= 90 ? 'text-green-600' : attSum.rate >= 75 ? 'text-amber-600' : 'text-red-600') : '',
-              )}>
-                {attSum?.total ? `${Math.round(attSum.rate)}%` : '—'}
-              </p>
-              <p className="text-[11px] text-muted-foreground">{attSum?.absent ?? 0} absences</p>
-            </CardContent>
-          </Card>
+          <div className="neo rounded-2xl p-4 text-center">
+            <Award className="size-4 mx-auto text-muted-foreground" />
+            <p className="text-xs text-muted-foreground mt-1 uppercase">Overall grade</p>
+            <p className="text-2xl font-bold">{avg?.count ? `${avg.average}%` : '\u2014'}</p>
+            {avg?.count ? <Badge variant="outline" className="mt-1">{percentToLetter(avg.average)}</Badge> : null}
+          </div>
+          <div className="neo rounded-2xl p-4 text-center">
+            <Target className="size-4 mx-auto text-muted-foreground" />
+            <p className="text-xs text-muted-foreground mt-1 uppercase">Attendance</p>
+            <p className={cn(
+              'text-2xl font-bold',
+              attSum?.total ? (attSum.rate >= 90 ? 'text-emerald-600' : attSum.rate >= 75 ? 'text-amber-600' : 'text-red-500') : '',
+            )}>
+              {attSum?.total ? `${Math.round(attSum.rate)}%` : '\u2014'}
+            </p>
+            <p className="text-[11px] text-muted-foreground">{attSum?.absent ?? 0} absences</p>
+          </div>
         </div>
 
         {/* Upcoming due */}
-        <Card>
-          <CardContent className="p-4 space-y-2">
-            <h2 className="text-sm font-semibold flex items-center gap-2">
-              <ClipboardList className="size-4" /> Due in the next two weeks
-            </h2>
-            {dueSoon.length === 0 ? (
-              <p className="text-sm text-muted-foreground">Nothing due soon.</p>
-            ) : (
-              dueSoon.map(a => (
-                <div key={a.id} className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm">
+        <div className="neo rounded-2xl p-5 space-y-3">
+          <h2 className="text-sm font-semibold flex items-center gap-2">
+            <ClipboardList className="size-4" /> Due in the next two weeks
+          </h2>
+          {dueSoon.length === 0 ? (
+            <p className="text-sm text-muted-foreground">Nothing due soon.</p>
+          ) : (
+            <div className="space-y-2">
+              {dueSoon.map(a => (
+                <div key={a.id} className="flex items-center gap-2 rounded-xl neo-flat px-3 py-2 text-sm">
                   <span className="truncate flex-1">{a.title}</span>
                   <span className="text-xs text-muted-foreground shrink-0">
                     {new Date(a.due_date).toLocaleDateString()}
                   </span>
                 </div>
-              ))
-            )}
-          </CardContent>
-        </Card>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Recent grades */}
-        <Card>
-          <CardContent className="p-4 space-y-2">
-            <h2 className="text-sm font-semibold flex items-center gap-2">
-              <Award className="size-4" /> Recent grades
-            </h2>
-            {grades.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No graded work yet.</p>
-            ) : (
-              <ul className="divide-y border rounded-xl text-sm">
-                {grades.map(g => (
-                  <li key={g.id} className="flex items-center gap-2 px-3 py-2">
-                    <Badge variant="outline" className="shrink-0 text-[11px]">{g.courses?.code ?? '—'}</Badge>
-                    <span className="truncate flex-1">{g.assessment_name}</span>
-                    <span className="shrink-0">{g.score}/{g.max_score}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+        <div className="neo rounded-2xl p-5 space-y-3">
+          <h2 className="text-sm font-semibold flex items-center gap-2">
+            <Award className="size-4" /> Recent grades
+          </h2>
+          {grades.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No graded work yet.</p>
+          ) : (
+            <div className="space-y-1">
+              {grades.map(g => (
+                <div key={g.id} className="flex items-center gap-2 rounded-xl neo-flat px-3 py-2 text-sm">
+                  <Badge variant="outline" className="shrink-0 text-[11px]">{g.courses?.code ?? '\u2014'}</Badge>
+                  <span className="truncate flex-1">{g.assessment_name}</span>
+                  <span className="shrink-0">{g.score}/{g.max_score}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         {/* Recent attendance */}
-        <Card>
-          <CardContent className="p-4 space-y-2">
-            <h2 className="text-sm font-semibold flex items-center gap-2">
-              <Target className="size-4" /> Recent attendance
-            </h2>
-            {attRows.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No records yet.</p>
-            ) : (
-              <ul className="divide-y border rounded-xl text-sm">
-                {attRows.map(r => (
-                  <li key={r.id} className="flex items-center gap-2 px-3 py-2">
-                    <span className="w-24 shrink-0 text-xs text-muted-foreground">{r.date}</span>
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        'capitalize shrink-0 text-[11px]',
-                        r.status === 'present' && 'text-green-600',
-                        r.status === 'absent' && 'text-red-600',
-                        r.status === 'late' && 'text-amber-600',
-                      )}
-                    >
-                      {r.status}
-                    </Badge>
-                    <span className="truncate text-xs text-muted-foreground">{r.class_sections?.name ?? ''}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </CardContent>
-        </Card>
+        <div className="neo rounded-2xl p-5 space-y-3">
+          <h2 className="text-sm font-semibold flex items-center gap-2">
+            <Target className="size-4" /> Recent attendance
+          </h2>
+          {attRows.length === 0 ? (
+            <p className="text-sm text-muted-foreground">No records yet.</p>
+          ) : (
+            <div className="space-y-1">
+              {attRows.map(r => (
+                <div key={r.id} className="flex items-center gap-2 rounded-xl neo-flat px-3 py-2 text-sm">
+                  <span className="w-24 shrink-0 text-xs text-muted-foreground">{r.date}</span>
+                  <Badge
+                    variant="outline"
+                    className={cn(
+                      'capitalize shrink-0 text-[11px]',
+                      r.status === 'present' && 'text-emerald-600',
+                      r.status === 'absent' && 'text-red-500',
+                      r.status === 'late' && 'text-amber-600',
+                    )}
+                  >
+                    {r.status}
+                  </Badge>
+                  <span className="truncate text-xs text-muted-foreground">{r.class_sections?.name ?? ''}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
-        {/* Fees — same board the child sees */}
+        {/* Fees */}
         <div className="space-y-2">
           <h2 className="text-sm font-semibold flex items-center gap-2 px-1">
             <Receipt className="size-4" /> Fee status
