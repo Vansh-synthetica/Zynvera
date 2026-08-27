@@ -61,19 +61,19 @@ export default function TeacherStudentDetailPage({ params }: { params: { id: str
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-4 py-6 space-y-4">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
         <Link href="/teacher/students" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="size-4" /> Roster
         </Link>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {error}
           </div>
         )}
 
         <div>
-          <h1 className="text-xl font-bold">{name}</h1>
+          <h1 className="text-2xl font-semibold tracking-tight">{name}</h1>
           <p className="text-sm text-muted-foreground">{email}</p>
         </div>
 

@@ -130,13 +130,13 @@ export default function PrincipalStudentsPage() {
           </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {error}
           </div>
         )}
 
         {importError && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {importError}
           </div>
         )}
@@ -149,7 +149,7 @@ export default function PrincipalStudentsPage() {
         )}
 
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-muted-foreground">
+          <div className="flex items-center justify-center py-16 text-muted-foreground">
             <Loader2 className="size-5 animate-spin mr-2" /> Loading students…
           </div>
         ) : filtered.length === 0 ? (
@@ -219,7 +219,7 @@ export default function PrincipalStudentsPage() {
           </DialogHeader>
           <div className="space-y-3">
             {importError && (
-              <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-2.5 text-xs text-destructive">
+              <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-2.5 text-xs text-destructive">
                 <AlertCircle className="size-3.5 shrink-0" /> {importError}
               </div>
             )}

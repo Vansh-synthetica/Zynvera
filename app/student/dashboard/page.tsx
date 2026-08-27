@@ -12,9 +12,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
-import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
 import { getCoursesByStudent } from '@/lib/api/courses'
 import { getAssignmentsDueSoon } from '@/lib/queries'
 import { getStudentAverage } from '@/lib/api/grades'
@@ -77,92 +75,90 @@ export default function StudentDashboardPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-5xl px-4 py-6 space-y-5">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
         <div>
-          <h1 className="text-xl font-bold">Welcome back, {firstName} 👋</h1>
-          <p className="text-sm text-muted-foreground">Here's where you stand today</p>
+          <h1 className="text-2xl font-semibold tracking-tight">Welcome back, {firstName}</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Here's where you stand today</p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {error}
           </div>
         )}
 
         {loading && stats.courses === null ? (
-          <div className="flex items-center justify-center py-20 text-muted-foreground">
-            <Loader2 className="size-5 animate-spin mr-2" /> Loading your data…
+          <div className="flex items-center justify-center py-16 text-muted-foreground">
+            <Loader2 className="size-5 animate-spin mr-2" /> Loading your data...
           </div>
         ) : (
           <>
             {/* Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-              <StatCard icon={BookOpen} label="Courses" value={stats.courses ?? '—'} href="/student/courses" />
+              <StatCard icon={BookOpen} label="Courses" value={stats.courses ?? '\u2014'} href="/student/courses" />
               <StatCard
                 icon={Award}
                 label="Avg grade"
-                value={stats.avgGrade !== null ? `${stats.avgGrade}%` : '—'}
+                value={stats.avgGrade !== null ? `${stats.avgGrade}%` : '\u2014'}
                 sub={stats.avgGrade !== null ? percentToLetter(stats.avgGrade) : undefined}
-                tone={stats.avgGrade !== null ? (stats.avgGrade >= 80 ? 'text-green-600' : stats.avgGrade >= 60 ? 'text-amber-600' : 'text-red-600') : undefined}
+                tone={stats.avgGrade !== null ? (stats.avgGrade >= 80 ? 'text-emerald-600' : stats.avgGrade >= 60 ? 'text-amber-600' : 'text-red-500') : undefined}
                 href="/student/grades"
               />
               <StatCard
                 icon={Target}
                 label="Attendance"
-                value={stats.attendanceRate !== null ? `${stats.attendanceRate}%` : '—'}
-                tone={stats.attendanceRate !== null ? (stats.attendanceRate >= 90 ? 'text-green-600' : 'text-amber-600') : undefined}
+                value={stats.attendanceRate !== null ? `${stats.attendanceRate}%` : '\u2014'}
+                tone={stats.attendanceRate !== null ? (stats.attendanceRate >= 90 ? 'text-emerald-600' : 'text-amber-600') : undefined}
                 href="/student/attendance"
               />
               <StatCard
                 icon={ClipboardList}
                 label="Due this week"
-                value={stats.dueSoonCount ?? '—'}
-                tone={stats.dueSoonCount !== null && stats.dueSoonCount > 0 ? 'text-purple-600' : undefined}
+                value={stats.dueSoonCount ?? '\u2014'}
+                tone={stats.dueSoonCount !== null && stats.dueSoonCount > 0 ? 'text-primary' : undefined}
                 href="/student/assignments"
               />
             </div>
 
             {/* Upcoming deadlines */}
-            <Card>
-              <CardContent className="p-4 space-y-3">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-sm font-semibold">Coming up</h2>
-                  <Button asChild variant="ghost" size="sm" className="gap-1 h-7 text-xs">
-                    <Link href="/student/assignments">All assignments <ArrowRight className="size-3" /></Link>
-                  </Button>
-                </div>
+            <div className="neo rounded-2xl p-5 space-y-3">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-semibold">Coming up</h2>
+                <Link href="/student/assignments" className="text-xs text-primary hover:underline flex items-center gap-1">
+                  All assignments <ArrowRight className="size-3" />
+                </Link>
+              </div>
 
-                {dueSoon.length === 0 ? (
-                  <p className="text-sm text-muted-foreground py-4 text-center">
-                    Nothing due in the next 7 days. Nice.
-                  </p>
-                ) : (
-                  <div className="space-y-2">
-                    {dueSoon.map(a => {
-                      const due = new Date(a.due_date)
-                      const daysLeft = Math.ceil((due.getTime() - Date.now()) / 86_400_000)
-                      return (
-                        <Link
-                          key={a.id}
-                          href="/student/assignments"
-                          className="flex items-center gap-3 rounded-md border p-2.5 hover:border-primary/40 transition-colors"
-                        >
-                          <div className="min-w-0 flex-1">
-                            <p className="text-sm font-medium truncate">{a.title}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {due.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
-                            </p>
-                          </div>
-                          <Badge variant={daysLeft <= 1 ? 'destructive' : daysLeft <= 3 ? 'secondary' : 'outline'} className="shrink-0">
-                            {daysLeft <= 0 ? 'Today' : `${daysLeft}d`}
-                          </Badge>
-                        </Link>
-                      )
-                    })}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
+              {dueSoon.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-6 text-center">
+                  Nothing due in the next 7 days. Nice.
+                </p>
+              ) : (
+                <div className="space-y-2">
+                  {dueSoon.map(a => {
+                    const due = new Date(a.due_date)
+                    const daysLeft = Math.ceil((due.getTime() - Date.now()) / 86_400_000)
+                    return (
+                      <Link
+                        key={a.id}
+                        href="/student/assignments"
+                        className="flex items-center gap-3 rounded-xl p-3 neo-flat hover:bg-secondary/30 transition-colors"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <p className="text-sm font-medium truncate">{a.title}</p>
+                          <p className="text-xs text-muted-foreground">
+                            {due.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        </div>
+                        <Badge variant={daysLeft <= 1 ? 'destructive' : daysLeft <= 3 ? 'warning' : 'outline'} className="shrink-0">
+                          {daysLeft <= 0 ? 'Today' : `${daysLeft}d`}
+                        </Badge>
+                      </Link>
+                    )
+                  })}
+                </div>
+              )}
+            </div>
 
             {/* Quick links */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
@@ -172,11 +168,10 @@ export default function StudentDashboardPage() {
                 ['Messages', '/student/messages'],
                 ['Announcements', '/student/announcements'],
               ].map(([label, href]) => (
-                <Button key={href} asChild variant="outline" size="sm" className="h-auto py-3 flex-col gap-0.5">
-                  <Link href={href}>
-                    <span className="text-sm">{label}</span>
-                  </Link>
-                </Button>
+                <Link key={href} href={href}
+                  className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                  {label}
+                </Link>
               ))}
             </div>
           </>
@@ -202,17 +197,17 @@ function StatCard({
   href: string
 }) {
   return (
-    <Link href={href}>
-      <Card className="hover:border-primary/40 transition-colors">
-        <CardContent className="p-4 flex items-start justify-between">
-          <div>
-            <p className="text-xs text-muted-foreground">{label}</p>
-            <p className={cn('text-2xl font-bold mt-1', tone ?? '')}>{value}</p>
-            {sub && <p className="text-[11px] text-muted-foreground">{sub}</p>}
-          </div>
-          <Icon className="size-4 text-muted-foreground shrink-0 mt-1" />
-        </CardContent>
-      </Card>
+    <Link href={href} className="neo-sm rounded-2xl p-4 neo-hover block">
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-[11px] text-muted-foreground uppercase tracking-wide">{label}</p>
+          <p className={cn('text-2xl font-bold mt-1', tone ?? 'text-foreground')}>{value}</p>
+          {sub && <p className="text-[11px] text-muted-foreground mt-0.5">{sub}</p>}
+        </div>
+        <div className="size-8 rounded-xl bg-muted/50 flex items-center justify-center">
+          <Icon className="size-4 text-muted-foreground" />
+        </div>
+      </div>
     </Link>
   )
 }

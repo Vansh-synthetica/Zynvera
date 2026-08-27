@@ -2,15 +2,15 @@
 
 import { withBase } from '@/lib/base-path'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
   LayoutDashboard, BookOpen, GraduationCap, CalendarDays, Clock, ClipboardCheck, ClipboardList,
   FileText, BarChart3, MessageSquare, Users, Megaphone, Video, HelpCircle,
-  Settings, Bell, ChevronLeft, ChevronRight, LogOut, Search, Plus,
-  Menu, X, Building2, ChevronDown, FolderOpen, AlertTriangle, Award,
-  Home, Target, TrendingUp, BookMarked, MessagesSquare, Zap, Link2, KeyRound, CalendarClock, Wallet
+  Settings, Bell, ChevronLeft, ChevronRight, LogOut, Search,
+  Menu, X, Building2, FolderOpen, AlertTriangle, Award,
+  Home, Target, TrendingUp, BookMarked, MessagesSquare, Link2, KeyRound, CalendarClock, Wallet
 } from 'lucide-react'
 import { useWorkspace } from '@/lib/workspace-context'
 import { getUnreadCount } from '@/lib/api/notifications'
@@ -18,7 +18,6 @@ import { getUnreadCount } from '@/lib/api/notifications'
 type NavItem = { label: string; href: string; icon: typeof LayoutDashboard; roles?: string[] }
 
 const mainNav: NavItem[] = [
-  // Student routes
   { label: 'Dashboard', href: '/student/dashboard', icon: Home, roles: ['student'] },
   { label: 'My Courses', href: '/student/courses', icon: BookOpen, roles: ['student'] },
   { label: 'Assignments', href: '/student/assignments', icon: ClipboardCheck, roles: ['student'] },
@@ -37,7 +36,6 @@ const mainNav: NavItem[] = [
   { label: 'Fee Status', href: '/student/fees', icon: Wallet, roles: ['student'] },
   { label: 'Reports', href: '/student/reports', icon: FileText, roles: ['student'] },
   { label: 'Family Code', href: '/student/family-code', icon: KeyRound, roles: ['student'] },
-  // Teacher routes
   { label: 'Today', href: '/teacher/today', icon: CalendarClock, roles: ['teacher'] },
   { label: 'Teacher Dashboard', href: '/teacher/dashboard', icon: LayoutDashboard, roles: ['teacher'] },
   { label: 'My Courses', href: '/teacher/courses', icon: BookOpen, roles: ['teacher'] },
@@ -51,7 +49,6 @@ const mainNav: NavItem[] = [
   { label: 'Assignment Manager', href: '/teacher/assignments', icon: ClipboardCheck, roles: ['teacher'] },
   { label: 'Assessment Builder', href: '/teacher/assessments', icon: FileText, roles: ['teacher'] },
   { label: 'Class Analytics', href: '/teacher/analytics', icon: BarChart3, roles: ['teacher'] },
-  // Principal/Admin routes
   { label: 'Institution Overview', href: '/principal/dashboard', icon: LayoutDashboard, roles: ['principal', 'admin', 'super_admin', 'department_head'] },
   { label: 'Staff Management', href: '/principal/staff', icon: Users, roles: ['principal', 'admin', 'super_admin'] },
   { label: 'Student Management', href: '/principal/students', icon: GraduationCap, roles: ['principal', 'admin', 'super_admin'] },
@@ -63,10 +60,8 @@ const mainNav: NavItem[] = [
   { label: 'Reports', href: '/principal/reports', icon: FileText, roles: ['principal', 'admin', 'super_admin'] },
   { label: 'Alerts', href: '/principal/alerts', icon: AlertTriangle, roles: ['principal', 'admin', 'super_admin'] },
   { label: 'Announcements', href: '/principal/announcements', icon: Megaphone, roles: ['principal', 'admin', 'super_admin'] },
-  // Parent routes
   { label: 'My Children', href: '/parent/dashboard', icon: GraduationCap, roles: ['parent'] },
   { label: 'Link a Child', href: '/parent/link', icon: KeyRound, roles: ['parent'] },
-  // Shared
   { label: 'Settings', href: '/settings', icon: Settings },
   { label: 'Integrations', href: '/integrations', icon: Link2 },
   { label: 'Help & Support', href: '/support', icon: HelpCircle },
@@ -83,7 +78,6 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   useEffect(() => { setMobileOpen(false) }, [pathname])
 
-  // Real unread count from Supabase for signed-in users.
   useEffect(() => {
     if (!userId) return
     let cancelled = false
@@ -95,44 +89,42 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
   const filteredNav =
     role === 'super_admin'
-      ? mainNav // owner account: every panel, one login
+      ? mainNav
       : mainNav.filter(item => !item.roles || item.roles.includes(role))
 
-  const badgeCls =
-    role === 'teacher' ? 'bg-blue-500/10 text-blue-600' :
-    role === 'principal' || role === 'admin' || role === 'super_admin' ? 'bg-purple-500/10 text-purple-600' :
-    'bg-emerald-500/10 text-emerald-600'
-  const badgeEmoji = role === 'teacher' ? '📚' : role === 'principal' || role === 'admin' || role === 'super_admin' ? '🏛️' : '🎓'
+  const roleLabel = role === 'super_admin' ? 'Owner' : role === 'principal' ? 'Admin' : role
 
   return (
-    <div className="min-h-screen bg-muted/30 text-foreground">
+    <div className="min-h-screen bg-background text-foreground">
       {/* Desktop sidebar */}
-      <aside className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:flex-col border-r bg-background transition-all duration-200 ${collapsed ? 'lg:w-[68px]' : 'lg:w-[260px]'}`}>
-        <div className="flex h-14 items-center gap-2 border-b px-4 shrink-0">
-          <Link href="/" className="flex items-center gap-2">
-            <span className="flex size-8 shrink-0 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">Z</span>
-            {!collapsed && <span className="text-sm font-semibold truncate">Zynvera</span>}
+      <aside className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:flex-col transition-all duration-200 ${collapsed ? 'lg:w-[68px]' : 'lg:w-[250px]'}`}
+        style={{ background: 'hsl(var(--sidebar-background))' }}>
+        {/* Logo */}
+        <div className="flex h-14 items-center gap-2.5 px-4 shrink-0">
+          <Link href="/" className="flex items-center gap-2.5">
+            <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground text-sm font-bold">Z</span>
+            {!collapsed && <span className="text-sm font-semibold text-sidebar-foreground">Zynvera</span>}
           </Link>
-          <button onClick={() => setCollapsed(!collapsed)} className="ml-auto hidden lg:flex size-7 items-center justify-center rounded-md text-muted-foreground hover:bg-muted">
-            {collapsed ? <ChevronRight className="size-4" /> : <ChevronLeft className="size-4" />}
+          <button onClick={() => setCollapsed(!collapsed)} className="ml-auto hidden lg:flex size-7 items-center justify-center rounded-lg text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
+            {collapsed ? <ChevronRight className="size-3.5" /> : <ChevronLeft className="size-3.5" />}
           </button>
         </div>
 
+        {/* Role + context */}
         {!collapsed && (
-          <div className="px-4 py-2 border-b">
-            <div className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ${badgeCls}`}>
-              <span>{badgeEmoji}</span>
-              <span className="capitalize">{role === 'super_admin' ? 'Owner' : `${role} panel`}</span>
-            </div>
+          <div className="px-4 pb-3 pt-1">
+            <span className="inline-flex items-center rounded-md bg-sidebar-accent px-2 py-0.5 text-[11px] font-medium text-sidebar-accent-foreground">
+              {roleLabel}
+            </span>
             {institution && (
-              <p className="mt-1.5 text-xs text-muted-foreground truncate">{institution.name}</p>
+              <p className="mt-2 text-xs text-sidebar-foreground/70 truncate">{institution.name}</p>
             )}
-            {term && <p className="text-[11px] text-muted-foreground truncate">{term.name}</p>}
-            {userName && <p className="mt-1 text-xs font-medium truncate">{userName}</p>}
+            {userName && <p className="text-[11px] text-sidebar-foreground/50 truncate">{userName}</p>}
           </div>
         )}
 
-        <nav className="flex-1 overflow-y-auto px-2 py-2 space-y-0.5">
+        {/* Nav */}
+        <nav className="flex-1 overflow-y-auto px-2.5 py-1 space-y-0.5">
           {filteredNav.map(item => {
             const active = pathname === item.href || pathname.startsWith(item.href + '/')
             const Icon = item.icon
@@ -140,60 +132,62 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Link
                 key={item.href + item.label}
                 href={item.href}
-                className={cn(
-                  'flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-colors',
-                  active ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted hover:text-foreground',
-                )}
+                className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] transition-all duration-150 ${
+                  active
+                    ? 'bg-sidebar-accent text-sidebar-foreground font-medium neo-sm'
+                    : 'text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/40'
+                }`}
                 title={item.label}
               >
                 <Icon className="size-4 shrink-0" />
                 {!collapsed && <span className="truncate">{item.label}</span>}
                 {!collapsed && item.label === 'Messages' && unreadCount > 0 && (
-                  <span className="ml-auto text-[10px] bg-primary text-primary-foreground rounded-full px-1.5 py-0.5">{unreadCount}</span>
+                  <span className="ml-auto text-[10px] bg-accent text-accent-foreground rounded-md px-1.5 py-0.5 font-medium">{unreadCount}</span>
                 )}
               </Link>
             )
           })}
         </nav>
 
-        <div className="border-t p-2 space-y-0.5">
+        {/* Bottom */}
+        <div className="border-t border-sidebar-border/30 p-2.5 space-y-0.5">
           {!collapsed && (
-            <Link href="/student/notifications" className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground">
+            <Link href="/student/notifications" className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/40">
               <Bell className="size-4" />
               Notifications
               {unreadCount > 0 && (
-                <span className="ml-auto text-[10px] bg-primary text-primary-foreground rounded-full px-1.5 py-0.5">{unreadCount}</span>
+                <span className="ml-auto text-[10px] bg-accent text-accent-foreground rounded-md px-1.5 py-0.5 font-medium">{unreadCount}</span>
               )}
             </Link>
           )}
           <button
             onClick={() => { clearWorkspace(); window.location.assign(withBase('/auth/login')) }}
-            className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted hover:text-foreground"
+            className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/40"
           >
             <LogOut className="size-4" />
-            {!collapsed && 'Switch Workspace'}
+            {!collapsed && 'Sign out'}
           </button>
         </div>
       </aside>
 
       {/* Mobile top bar */}
-      <header className="lg:hidden sticky top-0 z-40 border-b bg-background/95 backdrop-blur">
-        <div className="flex h-14 items-center gap-3 px-4">
-          <button onClick={() => setMobileOpen(true)} className="size-8 flex items-center justify-center rounded-md hover:bg-muted">
+      <header className="lg:hidden sticky top-0 z-40 bg-background/90 backdrop-blur-md">
+        <div className="flex h-13 items-center gap-3 px-4">
+          <button onClick={() => setMobileOpen(true)} className="size-9 flex items-center justify-center rounded-xl neo-sm">
             <Menu className="size-5" />
           </button>
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex size-7 items-center justify-center rounded-md bg-primary text-primary-foreground text-[11px] font-bold">Z</span>
+            <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-[11px] font-bold">Z</span>
             <span className="text-sm font-semibold">Zynvera</span>
           </Link>
-          <div className="ml-auto flex items-center gap-2">
-            <Link href="/student/notifications" className="relative size-8 flex items-center justify-center rounded-md hover:bg-muted">
+          <div className="ml-auto flex items-center gap-1.5">
+            <Link href="/student/notifications" className="relative size-9 flex items-center justify-center rounded-xl neo-sm">
               <Bell className="size-4" />
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 text-[10px] bg-primary text-primary-foreground rounded-full size-4 flex items-center justify-center">{unreadCount}</span>
+                <span className="absolute -top-0.5 -right-0.5 text-[10px] bg-accent text-accent-foreground rounded-md size-4 flex items-center justify-center font-medium">{unreadCount}</span>
               )}
             </Link>
-            <button onClick={() => setSearchOpen(true)} className="size-8 flex items-center justify-center rounded-md hover:bg-muted">
+            <button onClick={() => setSearchOpen(true)} className="size-9 flex items-center justify-center rounded-xl neo-sm">
               <Search className="size-4" />
             </button>
           </div>
@@ -203,19 +197,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Mobile drawer */}
       {mobileOpen && (
         <div className="fixed inset-0 z-50 lg:hidden">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setMobileOpen(false)} />
-          <div className="absolute inset-y-0 left-0 w-72 bg-background border-r overflow-y-auto">
-            <div className="flex h-14 items-center justify-between px-4 border-b">
+          <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setMobileOpen(false)} />
+          <div className="absolute inset-y-0 left-0 w-72 bg-background overflow-y-auto neo">
+            <div className="flex h-13 items-center justify-between px-4">
               <span className="text-sm font-semibold">Menu</span>
-              <button onClick={() => setMobileOpen(false)} className="size-8 flex items-center justify-center rounded-md hover:bg-muted">
+              <button onClick={() => setMobileOpen(false)} className="size-8 flex items-center justify-center rounded-lg hover:bg-muted">
                 <X className="size-4" />
               </button>
             </div>
-            <div className={`mx-4 my-2 inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] font-medium ${badgeCls}`}>
-              <span>{badgeEmoji}</span>
-              <span className="capitalize">{role === 'super_admin' ? 'Owner' : `${role} panel`}</span>
+            <div className="px-4 pb-3">
+              <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+                {roleLabel}
+              </span>
             </div>
-            <nav className="px-2 py-2 space-y-0.5">
+            <nav className="px-2.5 py-1 space-y-0.5">
               {filteredNav.map(item => {
                 const active = pathname.startsWith(item.href)
                 const Icon = item.icon
@@ -224,10 +219,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                     key={item.href + item.label}
                     href={item.href}
                     onClick={() => setMobileOpen(false)}
-                    className={cn(
-                      'flex items-center gap-3 rounded-lg px-3 py-2 text-sm',
-                      active ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted',
-                    )}
+                    className={`flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] ${
+                      active ? 'bg-primary/10 text-primary font-medium' : 'text-muted-foreground hover:bg-muted/50'
+                    }`}
                   >
                     <Icon className="size-4 shrink-0" />
                     <span className="truncate">{item.label}</span>
@@ -235,12 +229,12 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 )
               })}
             </nav>
-            <div className="border-t p-2">
+            <div className="border-t border-border/40 p-2.5 mt-2">
               <button
                 onClick={() => { clearWorkspace(); window.location.assign(withBase('/auth/login')) }}
-                className="w-full flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-muted-foreground hover:bg-muted"
+                className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] text-muted-foreground hover:bg-muted/50"
               >
-                <LogOut className="size-4" /> Switch Workspace
+                <LogOut className="size-4" /> Sign out
               </button>
             </div>
           </div>
@@ -250,16 +244,18 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Search overlay */}
       {searchOpen && (
         <div className="fixed inset-0 z-50" onClick={() => setSearchOpen(false)}>
-          <div className="absolute inset-x-0 top-0 border-b bg-background p-4" onClick={e => e.stopPropagation()}>
-            <div className="mx-auto max-w-xl">
-              <Input autoFocus placeholder="Search pages…" value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
-              <div className="mt-2 space-y-0.5 max-h-72 overflow-y-auto">
+          <div className="absolute inset-x-0 top-0 bg-background/95 backdrop-blur-md p-4 neo" onClick={e => e.stopPropagation()}>
+            <div className="mx-auto max-w-lg">
+              <input autoFocus placeholder="Search pages..."
+                value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
+                className="w-full h-10 rounded-xl bg-background px-3 text-sm neo-inset placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring" />
+              <div className="mt-2 space-y-0.5 max-h-64 overflow-y-auto">
                 {filteredNav
                   .filter(i => i.label.toLowerCase().includes(searchQuery.toLowerCase()))
                   .slice(0, 8)
                   .map(i => (
                     <Link key={i.href + i.label} href={i.href} onClick={() => setSearchOpen(false)}
-                      className="flex items-center gap-2 rounded-md px-3 py-2 text-sm hover:bg-muted">
+                      className="flex items-center gap-2 rounded-xl px-3 py-2 text-sm hover:bg-muted/50">
                       <i.icon className="size-4 text-muted-foreground" /> {i.label}
                     </Link>
                   ))}
@@ -270,17 +266,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Main content */}
-      <main className={`lg:pl-[260px] transition-all ${collapsed ? 'lg:pl-[68px]' : ''}`}>
+      <main className={`lg:pl-[250px] transition-all duration-200 ${collapsed ? 'lg:pl-[68px]' : ''}`}>
         {children}
       </main>
 
       {/* Mobile bottom nav */}
-      <nav className="fixed bottom-0 inset-x-0 z-30 border-t bg-background/95 backdrop-blur lg:hidden print:hidden">
+      <nav className="fixed bottom-0 inset-x-0 z-30 bg-background/90 backdrop-blur-md border-t border-border/40 lg:hidden print:hidden">
         <div className="flex items-center justify-around py-2">
           {(role === 'teacher' ? [
             { label: 'Today', href: '/teacher/today', icon: CalendarClock },
             { label: 'Courses', href: '/teacher/courses', icon: BookOpen },
-            { label: 'Gradebook', href: '/teacher/gradebook', icon: Award },
+            { label: 'Grades', href: '/teacher/gradebook', icon: Award },
             { label: 'Students', href: '/teacher/students', icon: Users },
             { label: 'More', href: '#', icon: Menu, action: () => setMobileOpen(true) },
           ] : role === 'principal' || role === 'admin' || role === 'super_admin' ? [
@@ -296,36 +292,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           ] : [
             { label: 'Home', href: '/student/dashboard', icon: Home },
             { label: 'Courses', href: '/student/courses', icon: BookOpen },
-            { label: 'Assignments', href: '/student/assignments', icon: ClipboardCheck },
+            { label: 'Tasks', href: '/student/assignments', icon: ClipboardCheck },
             { label: 'Grades', href: '/student/grades', icon: Award },
             { label: 'More', href: '#', icon: Menu, action: () => setMobileOpen(true) },
           ]).map((item: any) =>
             item.action ? (
               <button key={item.label} onClick={item.action} className="flex flex-col items-center gap-0.5 px-2 py-1 text-muted-foreground">
-                <item.icon className="size-4" />
+                <item.icon className="size-5" />
                 <span className="text-[10px]">{item.label}</span>
               </button>
             ) : (
-              <Link key={item.label} href={item.href} className={cn(
-                'flex flex-col items-center gap-0.5 px-2 py-1',
-                pathname.startsWith(item.href) ? 'text-primary' : 'text-muted-foreground',
-              )}>
-                <item.icon className="size-4" />
+              <Link key={item.label} href={item.href} className={`flex flex-col items-center gap-0.5 px-2 py-1 ${
+                pathname.startsWith(item.href) ? 'text-primary' : 'text-muted-foreground'
+              }`}>
+                <item.icon className="size-5" />
                 <span className="text-[10px]">{item.label}</span>
               </Link>
-            ),
+            )
           )}
         </div>
       </nav>
     </div>
   )
-}
-
-// Small local helper to avoid an extra import in this file.
-function cn(...classes: Array<string | false | null | undefined>) {
-  return classes.filter(Boolean).join(' ')
-}
-
-function Input(props: React.InputHTMLAttributes<HTMLInputElement>) {
-  return <input {...props} className={cn('flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm', props.className)} />
 }

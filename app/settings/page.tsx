@@ -41,7 +41,7 @@ export default function SettingsPage() {
                 <CardHeader><CardTitle className="text-base">Profile</CardTitle></CardHeader>
                 <CardContent className="space-y-4">
                   <div className="flex items-center gap-4">
-                    <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center text-xl font-bold text-primary">{userName.split(' ').map(n => n[0]).join('')}</div>
+                    <div className="size-16 rounded-full bg-primary/10 flex items-center justify-center text-2xl font-semibold tracking-tight text-primary">{userName.split(' ').map(n => n[0]).join('')}</div>
                     <div><p className="font-semibold">{userName}</p><p className="text-sm text-muted-foreground capitalize">{role}</p><p className="text-sm text-muted-foreground">{institution?.name}</p></div>
                   </div>
                 </CardContent>

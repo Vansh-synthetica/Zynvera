@@ -276,7 +276,7 @@ function AttendanceInner() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-5xl px-4 py-6 space-y-4">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-lg font-semibold">Attendance</h1>
@@ -290,7 +290,7 @@ function AttendanceInner() {
         </div>
 
         {pageError && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {pageError}
           </div>
         )}
@@ -428,7 +428,7 @@ function AttendanceInner() {
                           }}
                           className="w-full text-left"
                         >
-                          <div className="flex flex-wrap items-center gap-2 rounded-md border p-3 hover:border-primary/40 transition-colors">
+                          <div className="flex flex-wrap items-center gap-2 rounded-md border p-3 hover:bg-secondary/30 transition-colors">
                             <span className="text-sm font-medium">{day}</span>
                             <Badge variant="outline" className="ml-auto">{rate}% present</Badge>
                             {STATUSES.map(({ key, label, cls }) =>

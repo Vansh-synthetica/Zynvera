@@ -117,20 +117,20 @@ export default function StudentAnalyticsPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-4 py-6 space-y-4">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
         <div>
           <h1 className="text-lg font-semibold">My Analytics</h1>
           <p className="text-sm text-muted-foreground">Your performance at a glance</p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {error}
           </div>
         )}
 
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-muted-foreground">
+          <div className="flex items-center justify-center py-16 text-muted-foreground">
             <Loader2 className="size-5 animate-spin mr-2" /> Crunching numbers…
           </div>
         ) : courseStats.length === 0 ? (
@@ -220,7 +220,7 @@ function MiniStat({ label, value, sub }: { label: string; value: string; sub?: s
     <Card>
       <CardContent className="p-3.5">
         <p className="text-[11px] text-muted-foreground uppercase tracking-wide">{label}</p>
-        <p className="text-xl font-bold mt-0.5">{value}</p>
+        <p className="text-2xl font-semibold tracking-tight mt-0.5">{value}</p>
         {sub && <p className="text-[11px] text-muted-foreground">{sub}</p>}
       </CardContent>
     </Card>

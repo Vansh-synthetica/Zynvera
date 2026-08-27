@@ -104,7 +104,7 @@ export default function ParentLinkPage() {
         <Card>
           <CardContent className="p-4 space-y-3">
             {error && (
-              <div className="flex items-start gap-2 rounded-md border border-destructive/50 bg-destructive/10 p-2.5 text-xs text-destructive">
+              <div className="flex items-start gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-2.5 text-xs text-destructive">
                 <AlertCircle className="size-3.5 shrink-0 mt-0.5" /> {error}
               </div>
             )}

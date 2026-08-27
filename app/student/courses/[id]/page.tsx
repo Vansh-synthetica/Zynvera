@@ -98,7 +98,7 @@ export default function StudentCourseDetailPage({ params }: { params: { id: stri
           }[course.color as string] ?? 'from-blue-500 to-blue-600'}`} />
           <CardContent className="p-5 space-y-2">
             <Badge variant="outline">{course.code}</Badge>
-            <h1 className="text-xl font-bold">{course.title}</h1>
+            <h1 className="text-2xl font-semibold tracking-tight">{course.title}</h1>
             {course.description && <p className="text-sm text-muted-foreground">{course.description}</p>}
             <div className="flex flex-wrap gap-x-5 gap-y-1 pt-1 text-xs text-muted-foreground">
               {course.users?.name && (
@@ -131,7 +131,7 @@ export default function StudentCourseDetailPage({ params }: { params: { id: stri
                     href={r.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-2 rounded-md border p-2.5 hover:border-primary/40 transition-colors"
+                    className="flex items-center gap-2 rounded-md border p-2.5 hover:bg-secondary/30 transition-colors"
                   >
                     <FileText className="size-4 shrink-0 text-muted-foreground" />
                     <span className="text-sm font-medium truncate flex-1">{r.title}</span>

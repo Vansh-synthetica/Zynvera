@@ -8,7 +8,7 @@ import { CourseEditor } from '@/components/teacher/course-editor'
 export default function EditCoursePage({ params }: { params: { id: string } }) {
   return (
     <AppShell>
-      <div className="mx-auto max-w-5xl px-4 py-6 space-y-4">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
         <div className="flex items-center gap-3">
           <Link href={`/teacher/courses/${params.id}`} className="text-muted-foreground hover:text-foreground">
             <ArrowLeft className="size-4" />

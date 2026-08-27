@@ -249,11 +249,11 @@ export default function TrendingPage() {
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-4">
                       <div className="flex items-center justify-center w-12 h-12 bg-white/10 rounded-full">
-                        <span className="text-xl font-bold text-white">#{index + 1}</span>
+                        <span className="text-2xl font-semibold tracking-tight text-white">#{index + 1}</span>
                       </div>
                       <div>
                         <div className="flex items-center gap-3 mb-2">
-                          <h2 className="text-xl font-bold text-white">{item.title}</h2>
+                          <h2 className="text-2xl font-semibold tracking-tight text-white">{item.title}</h2>
                           <Badge
                             variant="secondary"
                             className={`text-xs ${

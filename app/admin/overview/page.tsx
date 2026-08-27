@@ -40,40 +40,40 @@ export default function AdminOverviewPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-4 py-6 space-y-4">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
         <div>
           <h1 className="text-lg font-semibold">Admin Overview</h1>
           <p className="text-sm text-muted-foreground">Institution snapshot</p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {error}
           </div>
         )}
 
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-muted-foreground">
+          <div className="flex items-center justify-center py-16 text-muted-foreground">
             <Loader2 className="size-5 animate-spin mr-2" /> Loading…
           </div>
         ) : (
           <div className="grid grid-cols-3 gap-3">
             <Link href="/principal/students">
-              <Card className="hover:border-primary/40 transition-colors"><CardContent className="p-4 text-center">
+              <Card className="hover:bg-secondary/30 transition-colors"><CardContent className="p-4 text-center">
                 <GraduationCap className="size-5 mx-auto text-muted-foreground" />
                 <p className="text-2xl font-bold mt-2">{stats.students ?? '—'}</p>
                 <p className="text-[11px] text-muted-foreground">Students</p>
               </CardContent></Card>
             </Link>
             <Link href="/principal/staff">
-              <Card className="hover:border-primary/40 transition-colors"><CardContent className="p-4 text-center">
+              <Card className="hover:bg-secondary/30 transition-colors"><CardContent className="p-4 text-center">
                 <Users className="size-5 mx-auto text-muted-foreground" />
                 <p className="text-2xl font-bold mt-2">{stats.staff ?? '—'}</p>
                 <p className="text-[11px] text-muted-foreground">Teachers</p>
               </CardContent></Card>
             </Link>
             <Link href="/principal/courses">
-              <Card className="hover:border-primary/40 transition-colors"><CardContent className="p-4 text-center">
+              <Card className="hover:bg-secondary/30 transition-colors"><CardContent className="p-4 text-center">
                 <BookOpen className="size-5 mx-auto text-muted-foreground" />
                 <p className="text-2xl font-bold mt-2">{stats.courses ?? '—'}</p>
                 <p className="text-[11px] text-muted-foreground">Courses</p>

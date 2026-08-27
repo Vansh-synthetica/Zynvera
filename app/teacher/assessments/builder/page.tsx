@@ -120,7 +120,7 @@ export default function AssessmentBuilderPage() {
 
       <div className="mx-auto max-w-5xl px-4 py-6">
         {error && (
-          <div className="mb-4 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="mb-4 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             {error}
           </div>
         )}

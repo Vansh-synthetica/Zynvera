@@ -285,7 +285,7 @@ export default function PrincipalFinancePage() {
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {error}
           </div>
         )}
@@ -294,15 +294,15 @@ export default function PrincipalFinancePage() {
         <div className="grid grid-cols-3 gap-3">
           <Card><CardContent className="p-4">
             <p className="text-xs text-muted-foreground flex items-center gap-1"><TrendingUp className="size-3 text-green-500" /> Income</p>
-            <p className="text-xl font-bold text-green-600 mt-1">{fmtMoney(totals.income)}</p>
+            <p className="text-2xl font-semibold tracking-tight text-green-600 mt-1">{fmtMoney(totals.income)}</p>
           </CardContent></Card>
           <Card><CardContent className="p-4">
             <p className="text-xs text-muted-foreground flex items-center gap-1"><TrendingDown className="size-3 text-red-500" /> Expenses</p>
-            <p className="text-xl font-bold text-red-600 mt-1">{fmtMoney(totals.expense)}</p>
+            <p className="text-2xl font-semibold tracking-tight text-red-600 mt-1">{fmtMoney(totals.expense)}</p>
           </CardContent></Card>
           <Card><CardContent className="p-4">
             <p className="text-xs text-muted-foreground flex items-center gap-1"><Wallet className="size-3" /> Net</p>
-            <p className={`text-xl font-bold mt-1 ${totals.net >= 0 ? 'text-green-600' : 'text-red-600'}`}>{fmtMoney(totals.net)}</p>
+            <p className={`text-2xl font-semibold tracking-tight mt-1 ${totals.net >= 0 ? 'text-green-600' : 'text-red-600'}`}>{fmtMoney(totals.net)}</p>
           </CardContent></Card>
         </div>
 

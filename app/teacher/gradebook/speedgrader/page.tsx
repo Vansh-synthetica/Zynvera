@@ -350,7 +350,7 @@ export default function SpeedGraderPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-5xl px-4 py-6 space-y-4">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
         {/* Header */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
@@ -547,7 +547,7 @@ export default function SpeedGraderPage() {
                     </div>
 
                     {saveError && (
-                      <div className="rounded-md border border-destructive/50 bg-destructive/10 p-2.5 text-xs text-destructive">
+                      <div className="rounded-xl bg-destructive/5 border border-destructive/20 p-2.5 text-xs text-destructive">
                         {saveError}
                       </div>
                     )}

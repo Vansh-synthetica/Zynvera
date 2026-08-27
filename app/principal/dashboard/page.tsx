@@ -14,7 +14,6 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
-import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { listUsers } from '@/lib/api/students'
@@ -87,7 +86,6 @@ export default function PrincipalDashboardPage() {
           netFunds: income - expense,
         })
 
-        // Open/critical first.
         const sortedAlerts = [...(alerts as any[])]
           .sort((a, b) => {
             const rank = (x: any) => (x.status === 'open' ? 0 : x.status === 'acknowledged' ? 1 : 2)
@@ -95,7 +93,6 @@ export default function PrincipalDashboardPage() {
           })
           .slice(0, 4)
         setRecentAlerts(sortedAlerts)
-
         setRecentNews((news as any[]).slice(0, 3))
       } catch (e: any) {
         if (!cancelled) setError(e?.message ?? 'Failed to load dashboard')
@@ -111,132 +108,130 @@ export default function PrincipalDashboardPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-5xl px-4 py-6 space-y-5">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
         <div>
-          <h1 className="text-xl font-bold">Institution Overview</h1>
-          <p className="text-sm text-muted-foreground">Good to see you, {firstName}</p>
+          <h1 className="text-2xl font-semibold tracking-tight">Institution Overview</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Good to see you, {firstName}</p>
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" /> {error}
           </div>
         )}
 
         {loading ? (
-          <div className="flex items-center justify-center py-20 text-muted-foreground">
-            <Loader2 className="size-5 animate-spin mr-2" /> Loading institution data…
+          <div className="flex items-center justify-center py-16 text-muted-foreground">
+            <Loader2 className="size-5 animate-spin mr-2" /> Loading institution data...
           </div>
         ) : (
           <>
             {/* Stats */}
             <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
-              <Stat icon={GraduationCap} label="Students" value={stats.students ?? '—'} href="/principal/students" />
-              <Stat icon={Users} label="Staff" value={stats.staff ?? '—'} href="/principal/staff" />
-              <Stat icon={BookOpen} label="Courses" value={stats.courses ?? '—'} href="/principal/courses" />
+              <Stat icon={GraduationCap} label="Students" value={stats.students ?? '\u2014'} href="/principal/students" />
+              <Stat icon={Users} label="Staff" value={stats.staff ?? '\u2014'} href="/principal/staff" />
+              <Stat icon={BookOpen} label="Courses" value={stats.courses ?? '\u2014'} href="/principal/courses" />
               <Stat icon={Wallet}
                 label="Net funds"
-                value={stats.netFunds !== null ? `$${Number(stats.netFunds).toLocaleString()}` : '—'}
-                tone={stats.netFunds !== null && stats.netFunds < 0 ? 'text-red-600' : undefined}
+                value={stats.netFunds !== null ? `$${Number(stats.netFunds).toLocaleString()}` : '\u2014'}
+                tone={stats.netFunds !== null && stats.netFunds < 0 ? 'text-red-500' : undefined}
                 href="/principal/finance" />
               <Stat icon={ShieldAlert}
                 label="Open alerts"
-                value={stats.openAlerts ?? '—'}
-                tone={stats.openAlerts !== null && stats.openAlerts > 0 ? 'text-red-600' : undefined}
+                value={stats.openAlerts ?? '\u2014'}
+                tone={stats.openAlerts !== null && stats.openAlerts > 0 ? 'text-red-500' : undefined}
                 href="/principal/alerts" />
             </div>
 
             {/* Join code card */}
-            <Card className="border-dashed">
-              <CardContent className="p-4 flex flex-wrap items-center justify-between gap-3">
-                <div>
-                  <p className="text-sm font-semibold flex items-center gap-2">
-                    <KeyRound className="size-4" /> School join code
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-0.5">
-                    Teachers and staff enter this to join your institution.
-                  </p>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="font-mono text-lg font-bold tracking-[0.25em]">{joinCode ?? '········'}</span>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    disabled={regenBusy || !joinCode}
-                    onClick={async () => {
-                      if (!confirm('Regenerate? The old code stops working immediately.')) return
-                      setRegenBusy(true)
-                      try {
-                        const supabase = (await import('@/lib/supabase/client')).createClient()
-                        const { data } = await supabase.rpc('regenerate_join_code')
-                        if (data) setJoinCode(data)
-                      } finally {
-                        setRegenBusy(false)
-                      }
-                    }}
-                  >
-                    Regenerate
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="neo rounded-2xl p-5 flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="text-sm font-semibold flex items-center gap-2">
+                  <KeyRound className="size-4 text-muted-foreground" /> School join code
+                </p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  Teachers and staff enter this to join your institution.
+                </p>
+              </div>
+              <div className="flex items-center gap-3">
+                <span className="font-mono text-lg font-bold tracking-[0.25em] neo-inset rounded-xl px-4 py-2">{joinCode ?? '\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7'}</span>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={regenBusy || !joinCode}
+                  onClick={async () => {
+                    if (!confirm('Regenerate? The old code stops working immediately.')) return
+                    setRegenBusy(true)
+                    try {
+                      const supabase = (await import('@/lib/supabase/client')).createClient()
+                      const { data } = await supabase.rpc('regenerate_join_code')
+                      if (data) setJoinCode(data)
+                    } finally {
+                      setRegenBusy(false)
+                    }
+                  }}
+                >
+                  Regenerate
+                </Button>
+              </div>
+            </div>
 
             <div className="grid gap-4 md:grid-cols-2">
               {/* Alerts */}
-              <Card>
-                <CardContent className="p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-semibold flex items-center gap-2">
-                      <ShieldAlert className="size-4" /> Latest alerts
-                    </h2>
-                    <Button asChild variant="ghost" size="sm" className="gap-1 h-7 text-xs">
-                      <Link href="/principal/alerts">All <ArrowRight className="size-3" /></Link>
-                    </Button>
-                  </div>
+              <div className="neo rounded-2xl p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-semibold flex items-center gap-2">
+                    <ShieldAlert className="size-4 text-muted-foreground" /> Latest alerts
+                  </h2>
+                  <Link href="/principal/alerts" className="text-xs text-primary hover:underline flex items-center gap-1">
+                    All <ArrowRight className="size-3" />
+                  </Link>
+                </div>
 
-                  {recentAlerts.length === 0 ? (
-                    <p className="text-sm text-muted-foreground py-4 text-center">No alerts raised.</p>
-                  ) : (
-                    recentAlerts.map(a => (
-                      <Link key={a.id} href="/principal/alerts" className="block rounded-md border p-2.5 hover:border-primary/40 transition-colors">
+                {recentAlerts.length === 0 ? (
+                  <p className="text-sm text-muted-foreground py-6 text-center">No alerts raised.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {recentAlerts.map(a => (
+                      <Link key={a.id} href="/principal/alerts" className="block rounded-xl p-3 neo-flat hover:bg-secondary/30 transition-colors">
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium truncate flex-1">{a.title}</span>
-                          <Badge variant={a.severity === 'critical' ? 'destructive' : a.severity === 'warning' ? 'secondary' : 'outline'}
+                          <Badge variant={a.severity === 'critical' ? 'destructive' : a.severity === 'warning' ? 'warning' : 'outline'}
                             className="text-[10px] shrink-0">
                             {a.severity}
                           </Badge>
                         </div>
                         <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{a.message}</p>
                       </Link>
-                    ))
-                  )}
-                </CardContent>
-              </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
 
               {/* Announcements */}
-              <Card>
-                <CardContent className="p-4 space-y-3">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-sm font-semibold flex items-center gap-2">
-                      <Megaphone className="size-4" /> Recent announcements
-                    </h2>
-                    <Button asChild variant="ghost" size="sm" className="gap-1 h-7 text-xs">
-                      <Link href="/principal/announcements">Manage <ArrowRight className="size-3" /></Link>
-                    </Button>
-                  </div>
+              <div className="neo rounded-2xl p-5 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-sm font-semibold flex items-center gap-2">
+                    <Megaphone className="size-4 text-muted-foreground" /> Recent announcements
+                  </h2>
+                  <Link href="/principal/announcements" className="text-xs text-primary hover:underline flex items-center gap-1">
+                    Manage <ArrowRight className="size-3" />
+                  </Link>
+                </div>
 
-                  {recentNews.length === 0 ? (
-                    <p className="text-sm text-muted-foreground py-4 text-center">Nothing published yet.</p>
-                  ) : (
-                    recentNews.map(n => (
-                      <Link key={n.id} href="/principal/announcements" className="block rounded-md border p-2.5 hover:border-primary/40 transition-colors">
+                {recentNews.length === 0 ? (
+                  <p className="text-sm text-muted-foreground py-6 text-center">Nothing published yet.</p>
+                ) : (
+                  <div className="space-y-2">
+                    {recentNews.map(n => (
+                      <Link key={n.id} href="/principal/announcements" className="block rounded-xl p-3 neo-flat hover:bg-secondary/30 transition-colors">
                         <p className="text-sm font-medium truncate">{n.title}</p>
                         <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{n.content}</p>
                       </Link>
-                    ))
-                  )}
-                </CardContent>
-              </Card>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
             {/* Quick actions */}
@@ -247,9 +242,10 @@ export default function PrincipalDashboardPage() {
                 ['Analytics', '/principal/analytics'],
                 ['Reports', '/principal/reports'],
               ].map(([label, href]) => (
-                <Button key={href} asChild variant="outline" size="sm" className="h-10">
-                  <Link href={href}>{label}</Link>
-                </Button>
+                <Link key={href} href={href}
+                  className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                  {label}
+                </Link>
               ))}
             </div>
           </>
@@ -268,14 +264,12 @@ function Stat({ icon: Icon, label, value, sub, tone, href }: {
   href: string
 }) {
   return (
-    <Link href={href}>
-      <Card className="hover:border-primary/40 transition-colors">
-        <CardContent className="p-4">
-          <Icon className="size-4 text-muted-foreground" />
-          <p className={cn('text-xl font-bold mt-2', tone ?? '')}>{value}</p>
-          <p className="text-[11px] text-muted-foreground">{label}{sub ? ` · ${sub}` : ''}</p>
-        </CardContent>
-      </Card>
+    <Link href={href} className="neo-sm rounded-2xl p-4 neo-hover block">
+      <div className="size-8 rounded-xl bg-muted/50 flex items-center justify-center mb-2">
+        <Icon className="size-4 text-muted-foreground" />
+      </div>
+      <p className={cn('text-2xl font-semibold tracking-tight', tone ?? 'text-foreground')}>{value}</p>
+      <p className="text-[11px] text-muted-foreground mt-0.5">{label}{sub ? ` \u00B7 ${sub}` : ''}</p>
     </Link>
   )
 }

@@ -358,7 +358,7 @@ export default function AssignmentsPage() {
         </div>
 
         {pageError && (
-          <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-3 text-sm text-destructive">
+          <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
             <AlertCircle className="size-4 shrink-0" />
             {pageError}
           </div>

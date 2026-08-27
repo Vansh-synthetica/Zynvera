@@ -213,7 +213,7 @@ export default function VerificationPage() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">
               <Shield className="w-5 h-5 text-primary-foreground" />
             </div>
-            <span className="text-xl font-bold tracking-tight">Zynvera</span>
+            <span className="text-2xl font-semibold tracking-tight tracking-tight">Zynvera</span>
           </div>
           <CardTitle className="text-2xl font-bold">Account Verification</CardTitle>
           <CardDescription>

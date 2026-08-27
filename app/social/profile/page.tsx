@@ -358,27 +358,27 @@ export default function ProfilePage() {
                     {/* Stats */}
                     <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
                       <div className="text-center">
-                        <div className="text-xl font-bold text-white">{profile.stats.posts}</div>
+                        <div className="text-2xl font-semibold tracking-tight text-white">{profile.stats.posts}</div>
                         <div className="text-xs text-white/60">Posts</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-bold text-white">{profile.stats.followers.toLocaleString()}</div>
+                        <div className="text-2xl font-semibold tracking-tight text-white">{profile.stats.followers.toLocaleString()}</div>
                         <div className="text-xs text-white/60">Followers</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-bold text-white">{profile.stats.following}</div>
+                        <div className="text-2xl font-semibold tracking-tight text-white">{profile.stats.following}</div>
                         <div className="text-xs text-white/60">Following</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-bold text-white">{profile.stats.likes.toLocaleString()}</div>
+                        <div className="text-2xl font-semibold tracking-tight text-white">{profile.stats.likes.toLocaleString()}</div>
                         <div className="text-xs text-white/60">Likes</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-bold text-white">{profile.stats.views.toLocaleString()}</div>
+                        <div className="text-2xl font-semibold tracking-tight text-white">{profile.stats.views.toLocaleString()}</div>
                         <div className="text-xs text-white/60">Views</div>
                       </div>
                       <div className="text-center">
-                        <div className="text-xl font-bold text-white flex items-center justify-center gap-1">
+                        <div className="text-2xl font-semibold tracking-tight text-white flex items-center justify-center gap-1">
                           <Zap className="h-4 w-4 text-orange-500" />
                           {profile.stats.streak}
                         </div>
