@@ -113,7 +113,7 @@ export default function AttendClassPage() {
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 h-[calc(100vh-8rem)]">
             {/* Main Class View */}
             <div className="lg:col-span-3 flex flex-col">
-              <Card className="flex-1 border-0 shadow-sm bg-white/80 backdrop-blur-sm overflow-hidden">
+              <Card className="flex-1 border-0 neo-sm bg-white/80 backdrop-blur-sm overflow-hidden">
                 <CardContent className="p-0 h-full flex flex-col">
                   {/* Class Header */}
                   <div className="p-6 border-b border-stone-100 bg-gradient-to-r from-stone-50 to-white">
@@ -247,7 +247,7 @@ export default function AttendClassPage() {
                       variant="ghost"
                       className={`flex-1 rounded-lg py-2 px-3 text-sm transition-all duration-300 ${
                         activeTab === tab.id
-                          ? "bg-white text-stone-900 shadow-sm"
+                          ? "bg-white text-stone-900 neo-sm"
                           : "text-stone-600 hover:text-stone-900"
                       }`}
                     >
@@ -259,7 +259,7 @@ export default function AttendClassPage() {
               </div>
 
               {/* Tab Content */}
-              <Card className="flex-1 border-0 shadow-sm bg-white/80 backdrop-blur-sm overflow-hidden">
+              <Card className="flex-1 border-0 neo-sm bg-white/80 backdrop-blur-sm overflow-hidden">
                 {/* AI Assistant Tab */}
                 {activeTab === "ai" && (
                   <div className="h-full flex flex-col">

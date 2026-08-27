@@ -137,7 +137,7 @@ export function SortableList({
       </div>
       <DragOverlay>
         {activeItem && (
-          <div className="rounded-lg border bg-card p-3 shadow-xl ring-2 ring-primary/20 opacity-90">
+          <div className="rounded-lg border bg-card p-3 neo ring-2 ring-primary/20 opacity-90">
             <div className="flex items-center gap-2">
               <GripVertical className="size-4 text-muted-foreground" />
               <span className="text-sm font-medium">{String(activeItem.id)}</span>

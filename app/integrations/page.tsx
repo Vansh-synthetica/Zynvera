@@ -40,7 +40,7 @@ export default function IntegrationsPage() {
         <div className="grid gap-4 sm:grid-cols-2">
           {integrations.map(integration => (
             <Link key={integration.id} href={integration.href}>
-              <Card className="transition-all hover:shadow-md hover:border-primary/20 h-full">
+              <Card className="transition-all neo-hover hover:border-primary/20 h-full">
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className={`size-12 rounded-xl ${integration.color} flex items-center justify-center text-white font-bold text-lg`}>

@@ -103,7 +103,7 @@ We're building amazing AI-powered features. Stay tuned!`)
 
           {/* Progress Summary Widget */}
           <Card
-            className="max-w-4xl mx-auto border-0 shadow-sm bg-white/80 backdrop-blur-sm animate-fade-in-up"
+            className="max-w-4xl mx-auto border-0 neo-sm bg-white/80 backdrop-blur-sm animate-fade-in-up"
             style={{ animationDelay: "200ms" }}
           >
             <CardContent className="p-8">
@@ -157,7 +157,7 @@ We're building amazing AI-powered features. Stay tuned!`)
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 h-5 w-5" />
               <Input
                 placeholder="What do you want to learn today? (e.g., Newton's Laws)"
-                className="pl-12 pr-24 h-14 text-lg border-0 shadow-lg bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-blue-500/20 rounded-2xl"
+                className="pl-12 pr-24 h-14 text-lg border-0 neo bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-blue-500/20 rounded-2xl"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onKeyPress={(e) => e.key === "Enter" && handleSearch()}
@@ -237,7 +237,7 @@ We're building amazing AI-powered features. Stay tuned!`)
               return (
                 <Card
                   key={index}
-                  className="border-0 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
+                  className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
                   style={{ animationDelay: `${index * 200}ms` }}
                   onClick={() => handleComingSoon(`${style.type} Recommendations`)}
                 >
@@ -336,7 +336,7 @@ We're building amazing AI-powered features. Stay tuned!`)
               ].map((video, index) => (
                 <Card
                   key={index}
-                  className="border-0 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
+                  className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
                   style={{ animationDelay: `${index * 200}ms` }}
                   onClick={() => handleComingSoon(`Watch ${video.title}`)}
                 >
@@ -431,7 +431,7 @@ We're building amazing AI-powered features. Stay tuned!`)
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             <div className="lg:col-span-2">
-              <Card className="border-0 shadow-sm animate-fade-in-up">
+              <Card className="border-0 neo-sm animate-fade-in-up">
                 <CardHeader>
                   <div className="flex items-center justify-between">
                     <CardTitle className="text-xl font-medium">Learning Progress</CardTitle>
@@ -477,7 +477,7 @@ We're building amazing AI-powered features. Stay tuned!`)
 
             <div className="space-y-6">
               {/* AI Recommendations */}
-              <Card className="border-0 shadow-sm animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+              <Card className="border-0 neo-sm animate-fade-in-up" style={{ animationDelay: "200ms" }}>
                 <CardHeader>
                   <CardTitle className="text-lg font-medium flex items-center gap-2">
                     <Brain className="h-5 w-5 text-blue-500" />
@@ -524,7 +524,7 @@ We're building amazing AI-powered features. Stay tuned!`)
               </Card>
 
               {/* Study Schedule */}
-              <Card className="border-0 shadow-sm animate-fade-in-up" style={{ animationDelay: "400ms" }}>
+              <Card className="border-0 neo-sm animate-fade-in-up" style={{ animationDelay: "400ms" }}>
                 <CardHeader>
                   <CardTitle className="text-lg font-medium flex items-center gap-2">
                     <Calendar className="h-5 w-5 text-purple-500" />
@@ -562,7 +562,7 @@ We're building amazing AI-powered features. Stay tuned!`)
       {/* AI Feedback Card */}
       <div className="fixed bottom-6 right-6 z-40 animate-fade-in-up" style={{ animationDelay: "1000ms" }}>
         <Button
-          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
+          className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full neo hover:neo transition-all duration-300 hover:scale-105"
           onClick={() => handleComingSoon("AI Assistant")}
         >
           <MessageSquare className="h-4 w-4 mr-2" />

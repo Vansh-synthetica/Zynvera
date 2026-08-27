@@ -100,7 +100,7 @@ export default function TeacherStudentDetailPage({ params }: { params: { id: str
             {grades.length === 0 ? (
               <p className="text-sm text-muted-foreground py-3 text-center">No graded work yet.</p>
             ) : (
-              <ul className="divide-y border rounded-md text-sm">
+              <ul className="divide-y border rounded-xl text-sm">
                 {grades.map(g => (
                   <li key={g.id} className="flex items-center gap-2 px-3 py-2">
                     <Badge variant="outline" className="shrink-0 text-[11px]">{g.courses?.code ?? '—'}</Badge>

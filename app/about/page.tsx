@@ -33,7 +33,7 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
             <Card
-              className="border-0 shadow-sm bg-white/50 backdrop-blur-sm cursor-pointer hover:shadow-xl transition-all duration-500 group hover:scale-105 animate-slide-in-left relative overflow-hidden"
+              className="border-0 neo-sm bg-white/50 backdrop-blur-sm cursor-pointer hover:neo transition-all duration-500 group hover:scale-105 animate-slide-in-left relative overflow-hidden"
               onClick={() => handleComingSoon("Mission Details")}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-500 opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
@@ -69,7 +69,7 @@ export default function AboutPage() {
             </Card>
 
             <Card
-              className="border-0 shadow-sm bg-white/50 backdrop-blur-sm cursor-pointer hover:shadow-xl transition-all duration-500 group hover:scale-105 animate-slide-in-right relative overflow-hidden"
+              className="border-0 neo-sm bg-white/50 backdrop-blur-sm cursor-pointer hover:neo transition-all duration-500 group hover:scale-105 animate-slide-in-right relative overflow-hidden"
               onClick={() => handleComingSoon("Vision Details")}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-blue-500 opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
@@ -117,7 +117,7 @@ export default function AboutPage() {
 
           <div className="flex justify-center">
             <Card
-              className="border-0 shadow-sm hover:shadow-xl transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden max-w-md"
+              className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden max-w-md"
               onClick={() => handleComingSoon("Shandie Ventura Profile")}
             >
               <div className="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-500 opacity-0 group-hover:opacity-5 transition-opacity duration-500" />
@@ -174,7 +174,7 @@ export default function AboutPage() {
               return (
                 <Card
                   key={index}
-                  className="border-0 shadow-sm text-center bg-white/50 backdrop-blur-sm hover:shadow-xl transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
+                  className="border-0 neo-sm text-center bg-white/50 backdrop-blur-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
                   style={{ animationDelay: `${index * 200}ms` }}
                   onClick={() => handleComingSoon(`${value.title} Details`)}
                 >
@@ -207,7 +207,7 @@ export default function AboutPage() {
             </p>
             <Button
               size="lg"
-              className="bg-black text-white hover:bg-gray-800 rounded-full px-12 py-4 group hover:scale-110 transition-all duration-500 shadow-lg hover:shadow-2xl relative overflow-hidden"
+              className="bg-black text-white hover:bg-gray-800 rounded-full px-12 py-4 group hover:scale-110 transition-all duration-500 neo hover:shadow-2xl relative overflow-hidden"
               onClick={() => handleComingSoon("Join Mission")}
             >
               <span className="relative z-10 flex items-center">

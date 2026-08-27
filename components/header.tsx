@@ -23,7 +23,7 @@ export function Header() {
     <header
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
         isScrolled
-          ? "bg-white/90 backdrop-blur-xl border-b border-gray-100/50 shadow-sm"
+          ? "bg-white/90 backdrop-blur-xl border-b border-gray-100/50 neo-sm"
           : "bg-white/80 backdrop-blur-xl border-b border-gray-100/30"
       }`}
     >
@@ -65,7 +65,7 @@ export function Header() {
               Sign In
             </Button>
             <Button
-              className="bg-black text-white hover:bg-gray-800 text-sm font-medium px-6 rounded-full transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] shadow-lg hover:shadow-xl hover:scale-105 animate-pulse-subtle"
+              className="bg-black text-white hover:bg-gray-800 text-sm font-medium px-6 rounded-full transition-all duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] neo hover:neo hover:scale-105 animate-pulse-subtle"
               onClick={() => handleComingSoon("Get Access")}
             >
               Get Access

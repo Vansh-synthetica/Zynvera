@@ -182,7 +182,7 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
             {grades.length === 0 ? (
               <p className="text-sm text-muted-foreground">No graded work yet.</p>
             ) : (
-              <ul className="divide-y border rounded-md text-sm">
+              <ul className="divide-y border rounded-xl text-sm">
                 {grades.map(g => (
                   <li key={g.id} className="flex items-center gap-2 px-3 py-2">
                     <Badge variant="outline" className="shrink-0 text-[11px]">{g.courses?.code ?? '—'}</Badge>
@@ -204,7 +204,7 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
             {attRows.length === 0 ? (
               <p className="text-sm text-muted-foreground">No records yet.</p>
             ) : (
-              <ul className="divide-y border rounded-md text-sm">
+              <ul className="divide-y border rounded-xl text-sm">
                 {attRows.map(r => (
                   <li key={r.id} className="flex items-center gap-2 px-3 py-2">
                     <span className="w-24 shrink-0 text-xs text-muted-foreground">{r.date}</span>

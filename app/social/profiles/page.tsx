@@ -694,7 +694,7 @@ export default function ProfilesPage() {
           {sortedUsers.map((user, index) => (
             <Card
               key={user.id}
-              className="hover:shadow-xl transition-all duration-500 group hover:scale-[1.02] animate-fade-in-up border-0 shadow-md bg-white/80 backdrop-blur-sm"
+              className="hover:neo transition-all duration-500 group hover:scale-[1.02] animate-fade-in-up border-0 neo-sm bg-white/80 backdrop-blur-sm"
               style={{ animationDelay: `${index * 100}ms` }}
             >
               <CardHeader className="pb-3">

@@ -207,7 +207,7 @@ export default function VerificationPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-background via-background to-muted/30 p-4">
-      <Card className="w-full max-w-2xl shadow-xl border-border/50">
+      <Card className="w-full max-w-2xl neo border-border/50">
         <CardHeader className="text-center space-y-4">
           <div className="flex items-center justify-center gap-2">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary/80 flex items-center justify-center">

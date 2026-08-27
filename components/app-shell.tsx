@@ -113,7 +113,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {/* Role + context */}
         {!collapsed && (
           <div className="px-4 pb-3 pt-1">
-            <span className="inline-flex items-center rounded-md bg-sidebar-accent px-2 py-0.5 text-[11px] font-medium text-sidebar-accent-foreground">
+            <span className="inline-flex items-center rounded-xl bg-sidebar-accent px-2 py-0.5 text-[11px] font-medium text-sidebar-accent-foreground">
               {roleLabel}
             </span>
             {institution && (
@@ -206,7 +206,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </button>
             </div>
             <div className="px-4 pb-3">
-              <span className="inline-flex items-center rounded-md bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+              <span className="inline-flex items-center rounded-xl bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
                 {roleLabel}
               </span>
             </div>

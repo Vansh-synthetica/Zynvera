@@ -353,7 +353,7 @@ export default function TeacherTodayPage() {
               <Textarea rows={3} value={hwDesc} onChange={e => setHwDesc(e.target.value)} placeholder="What should students do?" />
             </div>
             {hwErr && (
-              <div className="flex items-center gap-2 rounded-lg border border-destructive/50 bg-destructive/10 p-2.5 text-sm text-destructive">
+              <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-2.5 text-sm text-destructive">
                 <AlertCircle className="size-4 shrink-0" /> {hwErr}
               </div>
             )}

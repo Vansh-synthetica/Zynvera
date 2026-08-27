@@ -178,7 +178,7 @@ export default function ClassDetailPage() {
 
         {/* Class Stats */}
         <div className="grid grid-cols-2 gap-4 lg:grid-cols-4">
-          <Card className="transition-shadow hover:shadow-md">
+          <Card className="transition-shadow neo-hover">
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div className="flex size-9 items-center justify-center rounded-xl bg-blue-500/10 text-blue-600">
@@ -190,7 +190,7 @@ export default function ClassDetailPage() {
             </CardContent>
           </Card>
 
-          <Card className="transition-shadow hover:shadow-md">
+          <Card className="transition-shadow neo-hover">
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div className="flex size-9 items-center justify-center rounded-xl bg-teal-500/10 text-teal-600">
@@ -202,7 +202,7 @@ export default function ClassDetailPage() {
             </CardContent>
           </Card>
 
-          <Card className="transition-shadow hover:shadow-md">
+          <Card className="transition-shadow neo-hover">
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div className="flex size-9 items-center justify-center rounded-xl bg-violet-500/10 text-violet-600">
@@ -214,7 +214,7 @@ export default function ClassDetailPage() {
             </CardContent>
           </Card>
 
-          <Card className="transition-shadow hover:shadow-md">
+          <Card className="transition-shadow neo-hover">
             <CardContent className="p-4">
               <div className="flex items-start justify-between">
                 <div className="flex size-9 items-center justify-center rounded-xl bg-red-500/10 text-red-600">

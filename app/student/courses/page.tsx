@@ -78,7 +78,7 @@ export default function StudentCoursesPage() {
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {courses.map((c: any) => (
-              <Card key={c.id} className="overflow-hidden border-border/50 hover:shadow-md transition-shadow p-0">
+              <Card key={c.id} className="overflow-hidden border-border/50 neo-hover transition-shadow p-0">
                 <div className={`h-1.5 bg-gradient-to-r ${colorMap[c.color] ?? colorMap.blue}`} />
                 <CardContent className="p-4 space-y-3">
                   <div>

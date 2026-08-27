@@ -26,7 +26,7 @@ export default function Component() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
-      <header className="bg-white shadow-sm border-b">
+      <header className="bg-white neo-sm border-b">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center gap-8">
@@ -128,7 +128,7 @@ export default function Component() {
             <div>
               <h2 className="text-xl font-semibold mb-4">Continue Your Courses</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card className="hover:shadow-lg transition-shadow">
+                <Card className="hover:neo transition-shadow">
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">
                       <Video className="h-5 w-5 text-blue-600" />
@@ -153,7 +153,7 @@ export default function Component() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
+                <Card className="hover:neo transition-shadow">
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">
                       <BookOpen className="h-5 w-5 text-green-600" />
@@ -178,7 +178,7 @@ export default function Component() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
+                <Card className="hover:neo transition-shadow">
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">
                       <Video className="h-5 w-5 text-purple-600" />
@@ -220,7 +220,7 @@ export default function Component() {
             <div>
               <h2 className="text-xl font-semibold mb-4">Featured Courses</h2>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <Card className="hover:shadow-lg transition-shadow">
+                <Card className="hover:neo transition-shadow">
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">
                       <Badge className="bg-yellow-100 text-yellow-800">Bestseller</Badge>
@@ -252,7 +252,7 @@ export default function Component() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
+                <Card className="hover:neo transition-shadow">
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">
                       <Badge className="bg-blue-100 text-blue-800">New</Badge>
@@ -284,7 +284,7 @@ export default function Component() {
                   </CardContent>
                 </Card>
 
-                <Card className="hover:shadow-lg transition-shadow">
+                <Card className="hover:neo transition-shadow">
                   <CardHeader>
                     <div className="flex items-center gap-2 mb-2">
                       <Badge className="bg-green-100 text-green-800">Free</Badge>

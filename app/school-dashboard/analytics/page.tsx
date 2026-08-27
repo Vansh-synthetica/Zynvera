@@ -311,7 +311,7 @@ export default function AnalyticsPage() {
           </div>
 
           {/* Executive Dashboard Selector */}
-          <Card className="border-0 shadow-sm mb-8 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
+          <Card className="border-0 neo-sm mb-8 animate-fade-in-up" style={{ animationDelay: "200ms" }}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-medium">Dashboard View</h3>
@@ -351,7 +351,7 @@ export default function AnalyticsPage() {
                         key={dashboard.id}
                         size="sm"
                         variant={selectedDashboard === dashboard.id ? "default" : "ghost"}
-                        className="rounded-md text-xs flex items-center gap-2"
+                        className="rounded-xl text-xs flex items-center gap-2"
                         onClick={() => setSelectedDashboard(dashboard.id)}
                       >
                         <Icon className="h-4 w-4" />
@@ -368,7 +368,7 @@ export default function AnalyticsPage() {
                         key={period}
                         size="sm"
                         variant={selectedTimeframe === period ? "default" : "ghost"}
-                        className="rounded-md text-xs capitalize"
+                        className="rounded-xl text-xs capitalize"
                         onClick={() => setSelectedTimeframe(period)}
                       >
                         {period}
@@ -525,7 +525,7 @@ export default function AnalyticsPage() {
                     return (
                       <Card
                         key={index}
-                        className="border-0 shadow-sm hover:shadow-lg transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
+                        className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
                         style={{ animationDelay: `${index * 100}ms` }}
                         onClick={() => handleComingSoon(`${metric.title} Deep Dive`)}
                       >
@@ -563,7 +563,7 @@ export default function AnalyticsPage() {
               {/* Financial Dashboard */}
               {selectedDashboard === "financial" && (
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                  <Card className="lg:col-span-2 border-0 shadow-sm">
+                  <Card className="lg:col-span-2 border-0 neo-sm">
                     <CardHeader>
                       <CardTitle className="text-lg font-medium flex items-center gap-2">
                         <DollarSign className="h-5 w-5 text-green-600" />
@@ -614,7 +614,7 @@ export default function AnalyticsPage() {
                   </Card>
 
                   <div className="space-y-6">
-                    <Card className="border-0 shadow-sm">
+                    <Card className="border-0 neo-sm">
                       <CardHeader>
                         <CardTitle className="text-lg font-medium">Financial Health</CardTitle>
                       </CardHeader>
@@ -644,7 +644,7 @@ export default function AnalyticsPage() {
                       </CardContent>
                     </Card>
 
-                    <Card className="border-0 shadow-sm">
+                    <Card className="border-0 neo-sm">
                       <CardHeader>
                         <CardTitle className="text-lg font-medium">Expense Categories</CardTitle>
                       </CardHeader>
@@ -687,7 +687,7 @@ export default function AnalyticsPage() {
               {/* Predictive Analytics Dashboard */}
               {selectedDashboard === "predictive" && (
                 <div className="space-y-8">
-                  <Card className="border-0 shadow-sm">
+                  <Card className="border-0 neo-sm">
                     <CardHeader>
                       <CardTitle className="text-lg font-medium flex items-center gap-2">
                         <Brain className="h-5 w-5 text-purple-600" />
@@ -745,7 +745,7 @@ export default function AnalyticsPage() {
                   </Card>
 
                   {/* Risk Assessment Matrix */}
-                  <Card className="border-0 shadow-sm">
+                  <Card className="border-0 neo-sm">
                     <CardHeader>
                       <CardTitle className="text-lg font-medium flex items-center gap-2">
                         <Shield className="h-5 w-5 text-orange-600" />
@@ -825,7 +825,7 @@ export default function AnalyticsPage() {
               )}
 
               {/* Competitor Analysis */}
-              <Card className="border-0 shadow-sm">
+              <Card className="border-0 neo-sm">
                 <CardHeader>
                   <CardTitle className="text-lg font-medium flex items-center gap-2">
                     <Target className="h-5 w-5 text-blue-600" />
@@ -929,7 +929,7 @@ export default function AnalyticsPage() {
                   return (
                     <Card
                       key={index}
-                      className="border-0 shadow-sm hover:shadow-lg transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
+                      className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105 animate-fade-in-up relative overflow-hidden"
                       onClick={() => handleComingSoon(`${metric.title} Details`)}
                     >
                       <div
@@ -959,7 +959,7 @@ export default function AnalyticsPage() {
 
               {/* Student Performance Distribution */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="border-0 shadow-sm">
+                <Card className="border-0 neo-sm">
                   <CardHeader>
                     <CardTitle className="text-lg font-medium flex items-center gap-2">
                       <BarChart3 className="h-5 w-5 text-blue-600" />
@@ -1000,7 +1000,7 @@ export default function AnalyticsPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-sm">
+                <Card className="border-0 neo-sm">
                   <CardHeader>
                     <CardTitle className="text-lg font-medium flex items-center gap-2">
                       <AlertTriangle className="h-5 w-5 text-red-600" />
@@ -1063,7 +1063,7 @@ export default function AnalyticsPage() {
               </div>
 
               {/* Advanced Student Search and Management */}
-              <Card className="border-0 shadow-sm">
+              <Card className="border-0 neo-sm">
                 <CardHeader>
                   <CardTitle className="text-lg font-medium flex items-center gap-2">
                     <Search className="h-5 w-5 text-purple-600" />
@@ -1162,7 +1162,7 @@ export default function AnalyticsPage() {
                       ].map((student, index) => (
                         <div
                           key={index}
-                          className="p-6 bg-white border border-gray-200 rounded-lg hover:shadow-lg transition-all duration-300 cursor-pointer"
+                          className="p-6 bg-white border border-gray-200 rounded-lg hover:neo transition-all duration-300 cursor-pointer"
                           onClick={() => setExpandedStudent(expandedStudent === student.id ? null : student.id)}
                         >
                           <div className="flex items-center justify-between">
@@ -1352,7 +1352,7 @@ export default function AnalyticsPage() {
                   return (
                     <Card
                       key={index}
-                      className="border-0 shadow-sm hover:shadow-lg transition-all duration-500 cursor-pointer group hover:scale-105"
+                      className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105"
                       onClick={() => handleComingSoon(`${metric.title} Details`)}
                     >
                       <CardContent className="p-6">
@@ -1375,7 +1375,7 @@ export default function AnalyticsPage() {
               </div>
 
               {/* Teacher Performance Matrix */}
-              <Card className="border-0 shadow-sm">
+              <Card className="border-0 neo-sm">
                 <CardHeader>
                   <CardTitle className="text-lg font-medium flex items-center gap-2">
                     <BarChart3 className="h-5 w-5 text-green-600" />
@@ -1471,7 +1471,7 @@ export default function AnalyticsPage() {
                   return (
                     <Card
                       key={index}
-                      className="border-0 shadow-sm hover:shadow-lg transition-all duration-500 cursor-pointer group hover:scale-105"
+                      className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105"
                       onClick={() => handleComingSoon(`${metric.title} Details`)}
                     >
                       <CardContent className="p-6">
@@ -1494,7 +1494,7 @@ export default function AnalyticsPage() {
               </div>
 
               {/* Parent Communication Dashboard */}
-              <Card className="border-0 shadow-sm">
+              <Card className="border-0 neo-sm">
                 <CardHeader>
                   <CardTitle className="text-lg font-medium flex items-center gap-2">
                     <MessageSquare className="h-5 w-5 text-blue-600" />
@@ -1607,7 +1607,7 @@ export default function AnalyticsPage() {
                   return (
                     <Card
                       key={index}
-                      className="border-0 shadow-sm hover:shadow-lg transition-all duration-500 cursor-pointer group hover:scale-105"
+                      className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105"
                       onClick={() => handleComingSoon(`${metric.title} Analysis`)}
                     >
                       <CardContent className="p-6">
@@ -1631,7 +1631,7 @@ export default function AnalyticsPage() {
 
               {/* Detailed Financial Analysis */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="border-0 shadow-sm">
+                <Card className="border-0 neo-sm">
                   <CardHeader>
                     <CardTitle className="text-lg font-medium flex items-center gap-2">
                       <Pie className="h-5 w-5 text-green-600" />
@@ -1683,7 +1683,7 @@ export default function AnalyticsPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-sm">
+                <Card className="border-0 neo-sm">
                   <CardHeader>
                     <CardTitle className="text-lg font-medium flex items-center gap-2">
                       <BarChart3 className="h-5 w-5 text-red-600" />
@@ -1791,7 +1791,7 @@ export default function AnalyticsPage() {
                   return (
                     <Card
                       key={index}
-                      className="border-0 shadow-sm hover:shadow-lg transition-all duration-500 cursor-pointer group hover:scale-105"
+                      className="border-0 neo-sm hover:neo transition-all duration-500 cursor-pointer group hover:scale-105"
                       onClick={() => handleComingSoon(`${metric.title} Dashboard`)}
                     >
                       <CardContent className="p-6">
@@ -1815,7 +1815,7 @@ export default function AnalyticsPage() {
 
               {/* Technology & Infrastructure Dashboard */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <Card className="border-0 shadow-sm">
+                <Card className="border-0 neo-sm">
                   <CardHeader>
                     <CardTitle className="text-lg font-medium flex items-center gap-2">
                       <Monitor className="h-5 w-5 text-blue-600" />
@@ -1858,7 +1858,7 @@ export default function AnalyticsPage() {
                   </CardContent>
                 </Card>
 
-                <Card className="border-0 shadow-sm">
+                <Card className="border-0 neo-sm">
                   <CardHeader>
                     <CardTitle className="text-lg font-medium flex items-center gap-2">
                       <Shield className="h-5 w-5 text-green-600" />
@@ -1927,7 +1927,7 @@ export default function AnalyticsPage() {
 
             {/* AI Insights Tab */}
             <TabsContent value="insights" className="space-y-8">
-              <Card className="border-0 shadow-sm">
+              <Card className="border-0 neo-sm">
                 <CardHeader>
                   <CardTitle className="text-lg font-medium flex items-center gap-2">
                     <Brain className="h-5 w-5 text-purple-600" />

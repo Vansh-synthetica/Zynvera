@@ -478,7 +478,7 @@ export default function MessagesPage() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-[calc(100vh-200px)]">
           {/* Conversations List */}
           <div className={`lg:col-span-1 ${showMobileChat ? "hidden lg:block" : "block"}`}>
-            <Card className="h-full flex flex-col border-0 shadow-xl bg-white/90 backdrop-blur-sm animate-fade-in-left">
+            <Card className="h-full flex flex-col border-0 neo bg-white/90 backdrop-blur-sm animate-fade-in-left">
               <CardHeader className="pb-3">
                 <div className="flex items-center justify-between">
                   <CardTitle className="text-lg">Conversations</CardTitle>
@@ -522,9 +522,9 @@ export default function MessagesPage() {
                       .map((conversation) => (
                         <div
                           key={conversation.id}
-                          className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:scale-[1.02] hover:shadow-md ${
+                          className={`flex items-center gap-3 p-4 rounded-xl cursor-pointer transition-all duration-300 hover:bg-gradient-to-r hover:from-blue-50 hover:to-purple-50 hover:scale-[1.02] neo-hover ${
                             selectedConversation === conversation.id
-                              ? "bg-gradient-to-r from-blue-100 to-purple-100 shadow-md scale-[1.02]"
+                              ? "bg-gradient-to-r from-blue-100 to-purple-100 neo-sm scale-[1.02]"
                               : ""
                           }`}
                           onClick={() => {
@@ -646,7 +646,7 @@ export default function MessagesPage() {
           {/* Chat Area */}
           <div className={`lg:col-span-2 ${showMobileChat ? "block" : "hidden lg:block"}`}>
             {selectedConv ? (
-              <Card className="h-full flex flex-col border-0 shadow-xl bg-white/90 backdrop-blur-sm animate-fade-in-right">
+              <Card className="h-full flex flex-col border-0 neo bg-white/90 backdrop-blur-sm animate-fade-in-right">
                 {/* Chat Header */}
                 <CardHeader className="pb-3 border-b">
                   <div className="flex items-center justify-between">
@@ -783,7 +783,7 @@ export default function MessagesPage() {
                                 {message.edited && <span className="text-xs opacity-70 ml-2">(edited)</span>}
 
                                 {/* Message actions */}
-                                <div className="absolute -top-8 right-0 opacity-0 group-hover:opacity-100 transition-opacity bg-background border rounded-lg shadow-lg p-1 flex gap-1">
+                                <div className="absolute -top-8 right-0 opacity-0 group-hover:opacity-100 transition-opacity bg-background border rounded-lg neo p-1 flex gap-1">
                                   <TooltipProvider>
                                     <Tooltip>
                                       <TooltipTrigger asChild>

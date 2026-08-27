@@ -210,8 +210,8 @@ export function RichTextEditor({
   }
 
   return (
-    <div className="flex flex-col border border-border rounded-lg bg-background">
-      <div className="flex flex-wrap items-center gap-1 p-2 border-b border-border bg-muted/30">
+    <div className="flex flex-col rounded-2xl bg-background neo">
+      <div className="flex flex-wrap items-center gap-1 p-2 border-b border-border/40 bg-muted/20">
         <div className="flex items-center gap-1">
           <select
             value={editor?.getAttributes("heading").level || "paragraph"}
@@ -223,7 +223,7 @@ export function RichTextEditor({
                 editor?.chain().focus().setHeading({ level: Number(val) as 1 | 2 | 3 }).run()
               }
             }}
-            className="text-xs px-2 py-1 border border-border rounded bg-background"
+            className="text-xs px-2 py-1 rounded-xl neo-inset bg-background"
           >
             <option value="paragraph">Paragraph</option>
             <option value="1">Heading 1</option>
@@ -289,7 +289,7 @@ export function RichTextEditor({
         <EditorContent editor={editor} />
       </div>
 
-      <div className="flex items-center justify-between px-2 py-1 border-t border-border bg-muted/30 text-xs text-muted-foreground">
+      <div className="flex items-center justify-between px-2 py-1 border-t border-border/40 bg-muted/20 text-xs text-muted-foreground">
         <span>Words: {currentWordCount}</span>
         <span>Chars: {currentCharCount}</span>
         {maxChars && <span className={currentCharCount > maxChars ? "text-destructive" : ""}>/ {maxChars}</span>}

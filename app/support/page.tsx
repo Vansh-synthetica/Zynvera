@@ -21,7 +21,7 @@ export default function SupportPage() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2">
           {items.map(item => (
-            <Card key={item.title} className="transition-all hover:shadow-md cursor-pointer">
+            <Card key={item.title} className="transition-all neo-hover cursor-pointer">
               <CardContent className="flex items-start gap-4 p-5">
                 <div className="size-10 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
                   <item.icon className="size-4 text-primary" />

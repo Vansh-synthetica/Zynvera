@@ -311,7 +311,7 @@ export default function ZoomIntegrationPage() {
                   id="default-duration"
                   value={defaultDuration}
                   onChange={(e) => setDefaultDuration(Number(e.target.value))}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="flex h-10 w-full rounded-xl neo-inset bg-background px-3 py-2 text-sm  focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 >
                   <option value={15}>15 minutes</option>
                   <option value={30}>30 minutes</option>
@@ -368,7 +368,7 @@ export default function ZoomIntegrationPage() {
                   value={meetingTitle}
                   onChange={(e) => setMeetingTitle(e.target.value)}
                   placeholder="e.g., Physics Review Session"
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="flex h-10 w-full rounded-xl neo-inset bg-background px-3 py-2 text-sm  placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 />
               </div>
 
@@ -378,7 +378,7 @@ export default function ZoomIntegrationPage() {
                   id="meeting-duration"
                   value={meetingDuration}
                   onChange={(e) => setMeetingDuration(Number(e.target.value))}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="flex h-10 w-full rounded-xl neo-inset bg-background px-3 py-2 text-sm  focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 >
                   <option value={15}>15 minutes</option>
                   <option value={30}>30 minutes</option>
@@ -395,7 +395,7 @@ export default function ZoomIntegrationPage() {
                   type="datetime-local"
                   value={meetingDateTime}
                   onChange={(e) => setMeetingDateTime(e.target.value)}
-                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  className="flex h-10 w-full rounded-xl neo-inset bg-background px-3 py-2 text-sm  focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                 />
               </div>
 
