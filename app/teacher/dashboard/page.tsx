@@ -43,6 +43,8 @@ export default function TeacherDashboardPage() {
   }, [userId])
 
   const firstName = (userName ?? 'there').split(' ')[0]
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
 
   return (
     <AppShell>
@@ -50,7 +52,7 @@ export default function TeacherDashboardPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight">Teacher Dashboard</h1>
-            <p className="text-sm text-muted-foreground mt-0.5">Welcome back, {firstName}</p>
+            <p className="text-sm text-muted-foreground mt-0.5">{greeting}, {firstName}</p>
           </div>
           <div className="flex gap-2">
             <Button asChild variant="outline" size="sm" className="gap-1">

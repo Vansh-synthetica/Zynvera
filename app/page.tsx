@@ -198,6 +198,10 @@ export default function HomePage() {
             <Link href="/auth/login" className="hover:text-foreground">Sign in</Link>
             <Link href="/auth/sign-up" className="hover:text-foreground">Create account</Link>
             <Link href="/select-institution" className="hover:text-foreground">Institutions</Link>
+            <span className="text-muted-foreground/50">|</span>
+            <span className="cursor-default">Privacy</span>
+            <span className="cursor-default">Terms</span>
+            <span className="cursor-default">Contact</span>
           </div>
           <span>© 2026 Zynvera · by localhousellm</span>
         </div>

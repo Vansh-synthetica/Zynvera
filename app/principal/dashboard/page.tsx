@@ -77,7 +77,9 @@ export default function PrincipalDashboardPage() {
             .eq('id', institutionId)
             .single()
           if (inst?.join_code) setJoinCode(inst.join_code)
-        } catch {}
+        } catch (e: any) {
+          console.error('Failed to load join code:', e?.message)
+        }
 
         const staffFlat = staff.flat()
         const income = (txs as any[]).filter(t => t.type === 'income').reduce((s, t) => s + Number(t.amount), 0)
@@ -138,7 +140,7 @@ export default function PrincipalDashboardPage() {
               <Stat icon={BookOpen} label="Courses" value={stats.courses ?? '\u2014'} href="/principal/courses" />
               <Stat icon={Wallet}
                 label="Net funds"
-                value={stats.netFunds !== null ? `$${Number(stats.netFunds).toLocaleString()}` : '\u2014'}
+                value={stats.netFunds !== null ? Number(stats.netFunds).toLocaleString() : '\u2014'}
                 tone={stats.netFunds !== null && stats.netFunds < 0 ? 'text-red-500' : undefined}
                 href="/principal/finance" />
               <Stat icon={ShieldAlert}

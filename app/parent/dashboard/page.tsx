@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Loader2, AlertCircle, GraduationCap, ArrowRight, KeyRound, MessageSquare, Megaphone } from 'lucide-react'
+import { Loader2, AlertCircle, GraduationCap, ArrowRight, KeyRound, MessageSquare, Megaphone, RefreshCw } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Badge } from '@/components/ui/badge'
 import { getMyChildren } from '@/lib/api/institution'
@@ -69,10 +69,17 @@ export default function ParentDashboardPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight">Family Dashboard</h1>
-          <p className="text-sm text-muted-foreground mt-0.5">Track your children's progress</p>
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-2xl font-semibold tracking-tight">Family Dashboard</h1>
+            <p className="text-sm text-muted-foreground mt-0.5">Track your children's progress</p>
+          </div>
+          {!loading && (
+            <button onClick={load} className="size-9 rounded-xl neo-sm flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors" title="Refresh">
+              <RefreshCw className="size-4" />
+            </button>
+          )}
         </div>
 
         {error && (

@@ -61,7 +61,7 @@ export default function TeacherStudentDetailPage({ params }: { params: { id: str
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
         <Link href="/teacher/students" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground">
           <ArrowLeft className="size-4" /> Roster
         </Link>

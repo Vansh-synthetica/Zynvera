@@ -68,7 +68,7 @@ export default function StudentCoursesPage() {
               <BookOpen className="size-7 mx-auto text-muted-foreground" />
               <p className="text-sm font-medium">No enrollments yet</p>
               <p className="text-sm text-muted-foreground">
-                Your teachers add you to courses — they'll appear here instantly.
+                Your teachers add you to courses — they'll appear here instantly. Ask your teacher for a join code if you haven't been added yet.
               </p>
               <Button asChild variant="outline" className="mt-2">
                 <Link href="/student/dashboard">Back to Dashboard</Link>
@@ -98,7 +98,7 @@ export default function StudentCoursesPage() {
                     )}
                     <p className="flex items-center gap-1.5 pb-1">
                       <Users className="size-3.5 shrink-0" />
-                      {c.enrolled_students ?? '—'} / {c.max_students ?? '—'} students
+                      {c.enrolled_students ?? 0} of {c.max_students ?? '\u2014'} seats filled
                     </p>
                   </div>
 

@@ -10,6 +10,10 @@ import {
   Target,
   ClipboardList,
   ArrowRight,
+  Users,
+  CalendarDays,
+  MessagesSquare,
+  Megaphone,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Badge } from '@/components/ui/badge'
@@ -163,14 +167,15 @@ export default function StudentDashboardPage() {
             {/* Quick links */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               {[
-                ['Community', '/student/community'],
-                ['Calendar', '/student/calendar'],
-                ['Messages', '/student/messages'],
-                ['Announcements', '/student/announcements'],
-              ].map(([label, href]) => (
-                <Link key={href} href={href}
-                  className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                  {label}
+                { label: 'Community', href: '/student/community', icon: Users },
+                { label: 'Calendar', href: '/student/calendar', icon: CalendarDays },
+                { label: 'Messages', href: '/student/messages', icon: MessagesSquare },
+                { label: 'Announcements', href: '/student/announcements', icon: Megaphone },
+              ].map(item => (
+                <Link key={item.href} href={item.href}
+                  className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex flex-col items-center gap-1.5">
+                  <item.icon className="size-4" />
+                  {item.label}
                 </Link>
               ))}
             </div>

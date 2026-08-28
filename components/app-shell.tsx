@@ -82,6 +82,17 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   useEffect(() => { setMobileOpen(false) }, [pathname])
 
   useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+        e.preventDefault()
+        setSearchOpen(true)
+      }
+    }
+    window.addEventListener('keydown', handler)
+    return () => window.removeEventListener('keydown', handler)
+  }, [])
+
+  useEffect(() => {
     if (!userId) return
     let cancelled = false
     getUnreadCount(userId)
@@ -190,7 +201,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <span className="absolute -top-0.5 -right-0.5 text-[10px] bg-accent text-accent-foreground rounded-md size-4 flex items-center justify-center font-medium">{unreadCount}</span>
               )}
             </Link>
-            <button onClick={() => setSearchOpen(true)} className="size-9 flex items-center justify-center rounded-xl neo-sm">
+            <button onClick={() => setSearchOpen(true)} className="size-9 flex items-center justify-center rounded-xl neo-sm" title="Search (Ctrl+K)">
               <Search className="size-4" />
             </button>
           </div>

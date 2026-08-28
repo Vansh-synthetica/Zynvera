@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import {
   Loader2,
@@ -93,6 +93,11 @@ export default function TeacherTodayPage() {
   const [hwSaving, setHwSaving] = useState(false)
   const [hwMsg, setHwMsg] = useState('')
   const [hwErr, setHwErr] = useState('')
+  const hwCloseTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => { if (hwCloseTimer.current) clearTimeout(hwCloseTimer.current) }
+  }, [])
 
   const load = useCallback(async () => {
     if (!userId) return
@@ -196,7 +201,7 @@ export default function TeacherTodayPage() {
       }).catch(() => {})
 
       setHwMsg('Posted and students notified.')
-      setTimeout(() => setHwOpen(false), 900)
+      hwCloseTimer.current = setTimeout(() => setHwOpen(false), 900)
     } catch (e: any) {
       setHwErr(e?.message ?? 'Failed to post homework')
     } finally {
@@ -208,7 +213,7 @@ export default function TeacherTodayPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-6 space-y-6">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
         {/* Header */}
         <div className="flex flex-wrap items-end justify-between gap-3">
           <div>
