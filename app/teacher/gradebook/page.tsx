@@ -374,7 +374,7 @@ export default function GradebookPage() {
                 <CardContent className="p-0 overflow-x-auto">
                   <table className="w-full text-sm border-collapse min-w-[720px]">
                     <thead>
-                      <tr className="border-b bg-muted/40">
+                      <tr className="border-b neo-inset">
                         <th className="text-left p-2.5 sticky left-0 bg-background z-10 min-w-[160px]">
                           Student
                         </th>

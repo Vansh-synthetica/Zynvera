@@ -205,9 +205,9 @@ function StatCard({
     <Link href={href} className="neo-sm rounded-2xl p-4 neo-hover block">
       <div className="flex items-start justify-between">
         <div>
-          <p className="text-[11px] text-muted-foreground uppercase tracking-wide">{label}</p>
+          <p className="text-xs text-muted-foreground uppercase tracking-wide">{label}</p>
           <p className={cn('text-2xl font-bold mt-1', tone ?? 'text-foreground')}>{value}</p>
-          {sub && <p className="text-[11px] text-muted-foreground mt-0.5">{sub}</p>}
+          {sub && <p className="text-xs text-muted-foreground mt-0.5">{sub}</p>}
         </div>
         <div className="size-8 rounded-xl bg-muted/50 flex items-center justify-center">
           <Icon className="size-4 text-muted-foreground" />

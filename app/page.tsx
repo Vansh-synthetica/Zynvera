@@ -67,7 +67,7 @@ export default function HomePage() {
       </header>
 
       {/* Hero */}
-      <section className="border-b">
+      <section className="border-b bg-gradient-to-b from-muted/30 to-background">
         <div className="mx-auto max-w-6xl px-4 py-20 text-center">
           <Badge variant="outline" className="mb-4">One platform for your entire school</Badge>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight">
@@ -169,7 +169,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA */}
-      <section className="py-20 border-t bg-muted/30">
+      <section className="py-20 border-t bg-gradient-to-b from-background to-muted/40 backdrop-blur-sm">
         <div className="mx-auto max-w-3xl px-4 text-center">
           <TrendingUp className="size-8 mx-auto text-primary" />
           <h2 className="mt-4 text-3xl font-bold">Your school workspace is waiting</h2>

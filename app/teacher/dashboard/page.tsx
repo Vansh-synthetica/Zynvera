@@ -82,21 +82,21 @@ export default function TeacherDashboardPage() {
                   <BookOpen className="size-4 text-muted-foreground" />
                 </div>
                 <p className="text-2xl font-bold">{stats.courses ?? '\u2014'}</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Active courses</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Active courses</p>
               </div>
               <div className="neo-sm rounded-2xl p-4">
                 <div className="size-8 rounded-xl bg-muted/50 flex items-center justify-center mb-2">
                   <ClipboardCheck className="size-4 text-muted-foreground" />
                 </div>
                 <p className="text-2xl font-bold">{stats.assignments ?? '\u2014'}</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Assignments</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Assignments</p>
               </div>
               <div className="neo-sm rounded-2xl p-4">
                 <div className="size-8 rounded-xl bg-muted/50 flex items-center justify-center mb-2">
                   <Users className="size-4 text-muted-foreground" />
                 </div>
                 <p className="text-2xl font-bold">{courseList.reduce((s, c: any) => s + (c.enrolled_students ?? 0), 0)}</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5">Enrolments</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Enrolments</p>
               </div>
             </div>
 

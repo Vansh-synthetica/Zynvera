@@ -209,11 +209,11 @@ export default function PrincipalDashboardPage() {
                         <div className="flex items-center gap-2">
                           <span className="text-sm font-medium truncate flex-1">{a.title}</span>
                           <Badge variant={a.severity === 'critical' ? 'destructive' : a.severity === 'warning' ? 'warning' : 'outline'}
-                            className="text-[10px] shrink-0">
+                            className="text-xs shrink-0">
                             {a.severity}
                           </Badge>
                         </div>
-                        <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{a.message}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{a.message}</p>
                       </Link>
                     ))}
                   </div>
@@ -238,7 +238,7 @@ export default function PrincipalDashboardPage() {
                     {recentNews.map(n => (
                       <Link key={n.id} href="/principal/announcements" className="block rounded-xl p-3 neo-flat hover:bg-secondary/30 transition-colors">
                         <p className="text-sm font-medium truncate">{n.title}</p>
-                        <p className="text-[11px] text-muted-foreground mt-0.5 line-clamp-1">{n.content}</p>
+                        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">{n.content}</p>
                       </Link>
                     ))}
                   </div>
@@ -316,7 +316,7 @@ function Stat({ icon: Icon, label, value, sub, tone, href }: {
         <Icon className="size-4 text-muted-foreground" />
       </div>
       <p className={cn('text-2xl font-semibold tracking-tight', tone ?? 'text-foreground')}>{value}</p>
-      <p className="text-[11px] text-muted-foreground mt-0.5">{label}{sub ? ` \u00B7 ${sub}` : ''}</p>
+      <p className="text-xs text-muted-foreground mt-0.5">{label}{sub ? ` \u00B7 ${sub}` : ''}</p>
     </Link>
   )
 }

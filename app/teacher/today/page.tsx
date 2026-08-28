@@ -240,24 +240,20 @@ export default function TeacherTodayPage() {
 
         {/* Summary strip */}
         <div className="grid grid-cols-2 gap-3">
-          <Card>
-            <CardContent className="p-4 flex items-center gap-3">
-              <CalendarDays className="size-5 text-muted-foreground shrink-0" />
-              <div>
-                <p className="text-lg font-semibold leading-none">{classes.length}</p>
-                <p className="text-xs text-muted-foreground">classes today</p>
-              </div>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardContent className="p-4 flex items-center gap-3">
-              <UserCheck className={`size-5 shrink-0 ${takenCount === classes.length && classes.length > 0 ? 'text-green-600' : 'text-muted-foreground'}`} />
-              <div>
-                <p className="text-lg font-semibold leading-none">{takenCount}/{classes.length}</p>
-                <p className="text-xs text-muted-foreground">registers taken</p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="neo-inset rounded-2xl p-4 flex items-center gap-3">
+            <CalendarDays className="size-5 text-muted-foreground shrink-0" />
+            <div>
+              <p className="text-lg font-semibold leading-none">{classes.length}</p>
+              <p className="text-xs text-muted-foreground">classes today</p>
+            </div>
+          </div>
+          <div className="neo-inset rounded-2xl p-4 flex items-center gap-3">
+            <UserCheck className={`size-5 shrink-0 ${takenCount === classes.length && classes.length > 0 ? 'text-green-600' : 'text-muted-foreground'}`} />
+            <div>
+              <p className="text-lg font-semibold leading-none">{takenCount}/{classes.length}</p>
+              <p className="text-xs text-muted-foreground">registers taken</p>
+            </div>
+          </div>
         </div>
 
         {/* Class list */}

@@ -112,7 +112,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     <div className="min-h-screen bg-background text-foreground">
       {/* Desktop sidebar */}
       <aside className={`hidden lg:fixed lg:inset-y-0 lg:left-0 lg:z-30 lg:flex lg:flex-col transition-all duration-200 ${collapsed ? 'lg:w-[68px]' : 'lg:w-[250px]'}`}
-        style={{ background: 'hsl(var(--sidebar-background))' }}>
+        style={{ background: 'hsl(var(--sidebar-background) / 0.85)', backdropFilter: 'blur(16px)' }}>
         {/* Logo */}
         <div className="flex h-14 items-center gap-2.5 px-4 shrink-0">
           <Link href="/" className="flex items-center gap-2.5">
@@ -127,13 +127,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {/* Role + context */}
         {!collapsed && (
           <div className="px-4 pb-3 pt-1">
-            <span className="inline-flex items-center rounded-xl bg-sidebar-accent px-2 py-0.5 text-[11px] font-medium text-sidebar-accent-foreground">
+            <span className="inline-flex items-center rounded-xl bg-sidebar-accent px-2 py-0.5 text-xs font-medium text-sidebar-accent-foreground">
               {roleLabel}
             </span>
             {institution && (
               <p className="mt-2 text-xs text-sidebar-foreground/70 truncate">{institution.name}</p>
             )}
-            {userName && <p className="text-[11px] text-sidebar-foreground/50 truncate">{userName}</p>}
+            {userName && <p className="text-xs text-sidebar-foreground/50 truncate">{userName}</p>}
           </div>
         )}
 
@@ -156,7 +156,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <Icon className="size-4 shrink-0" />
                 {!collapsed && <span className="truncate">{item.label}</span>}
                 {!collapsed && item.label === 'Messages' && unreadCount > 0 && (
-                  <span className="ml-auto text-[10px] bg-accent text-accent-foreground rounded-md px-1.5 py-0.5 font-medium">{unreadCount}</span>
+                  <span className="ml-auto text-xs bg-accent text-accent-foreground rounded-md px-1.5 py-0.5 font-medium">{unreadCount}</span>
                 )}
               </Link>
             )
@@ -170,7 +170,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               <Bell className="size-4" />
               Notifications
               {unreadCount > 0 && (
-                <span className="ml-auto text-[10px] bg-accent text-accent-foreground rounded-md px-1.5 py-0.5 font-medium">{unreadCount}</span>
+                <span className="ml-auto text-xs bg-accent text-accent-foreground rounded-md px-1.5 py-0.5 font-medium">{unreadCount}</span>
               )}
             </Link>
           )}
@@ -191,14 +191,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <Menu className="size-5" />
           </button>
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-[11px] font-bold">Z</span>
+            <span className="flex size-7 items-center justify-center rounded-lg bg-primary text-primary-foreground text-xs font-bold">Z</span>
             <span className="text-sm font-semibold">Zynvera</span>
           </Link>
           <div className="ml-auto flex items-center gap-1.5">
             <Link href={role === 'teacher' ? '/teacher/messages' : role === 'parent' ? '/parent/dashboard' : '/student/notifications'} className="relative size-9 flex items-center justify-center rounded-xl neo-sm">
               <Bell className="size-4" />
               {unreadCount > 0 && (
-                <span className="absolute -top-0.5 -right-0.5 text-[10px] bg-accent text-accent-foreground rounded-md size-4 flex items-center justify-center font-medium">{unreadCount}</span>
+                <span className="absolute -top-0.5 -right-0.5 text-xs bg-accent text-accent-foreground rounded-md size-4 flex items-center justify-center font-medium">{unreadCount}</span>
               )}
             </Link>
             <button onClick={() => setSearchOpen(true)} className="size-9 flex items-center justify-center rounded-xl neo-sm" title="Search (Ctrl+K)">
@@ -220,7 +220,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </button>
             </div>
             <div className="px-4 pb-3">
-              <span className="inline-flex items-center rounded-xl bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">
+              <span className="inline-flex items-center rounded-xl bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
                 {roleLabel}
               </span>
             </div>
@@ -258,7 +258,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       {/* Search overlay */}
       {searchOpen && (
         <div className="fixed inset-0 z-50" onClick={() => setSearchOpen(false)}>
-          <div className="absolute inset-x-0 top-0 bg-background/95 backdrop-blur-md p-4 neo" onClick={e => e.stopPropagation()}>
+          <div className="absolute inset-x-0 top-0 bg-background/80 backdrop-blur-xl p-4 border-b border-border/30" onClick={e => e.stopPropagation()}>
             <div className="mx-auto max-w-lg">
               <input autoFocus placeholder="Search pages..."
                 value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
@@ -313,14 +313,14 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             item.action ? (
               <button key={item.label} onClick={item.action} className="flex flex-col items-center gap-0.5 px-2 py-1 text-muted-foreground">
                 <item.icon className="size-5" />
-                <span className="text-[10px]">{item.label}</span>
+                <span className="text-xs">{item.label}</span>
               </button>
             ) : (
               <Link key={item.label} href={item.href} className={`flex flex-col items-center gap-0.5 px-2 py-1 ${
                 pathname.startsWith(item.href) ? 'text-primary' : 'text-muted-foreground'
               }`}>
                 <item.icon className="size-5" />
-                <span className="text-[10px]">{item.label}</span>
+                <span className="text-xs">{item.label}</span>
               </Link>
             )
           )}

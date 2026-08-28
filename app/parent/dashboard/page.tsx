@@ -129,23 +129,23 @@ export default function ParentDashboardPage() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-2">
-                    <div className="rounded-xl neo-flat p-3 text-center">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Grade</p>
+                    <div className="rounded-xl neo-inset p-3 text-center">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide">Grade</p>
                       <p className="text-lg font-bold mt-0.5">{s?.avg !== null && s?.avg !== undefined ? `${s.avg}%` : '\u2014'}</p>
-                      {s?.letter && <Badge variant="outline" className="text-[10px] mt-1">{s.letter}</Badge>}
+                      {s?.letter && <Badge variant="outline" className="text-xs mt-1">{s.letter}</Badge>}
                     </div>
-                    <div className="rounded-xl neo-flat p-3 text-center">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Attendance</p>
+                    <div className="rounded-xl neo-inset p-3 text-center">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide">Attendance</p>
                       <p className={`text-lg font-bold mt-0.5 ${
                         s?.attRate == null ? '' : s.attRate >= 90 ? 'text-emerald-600' : s.attRate >= 75 ? 'text-amber-600' : 'text-red-500'
                       }`}>
                         {s?.attRate !== null && s?.attRate !== undefined ? `${s.attRate}%` : '\u2014'}
                       </p>
                     </div>
-                    <div className="rounded-xl neo-flat p-3 text-center">
-                      <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Absences</p>
+                    <div className="rounded-xl neo-inset p-3 text-center">
+                      <p className="text-xs text-muted-foreground uppercase tracking-wide">Absences</p>
                       <p className={`text-lg font-bold mt-0.5 ${s && s.absences > 3 ? 'text-red-500' : ''}`}>{s?.absences ?? 0}</p>
-                      {s && s.absences > 3 && <p className="text-[10px] text-red-500 mt-0.5">Exceeds 3-day limit</p>}
+                      {s && s.absences > 3 && <p className="text-xs text-red-500 mt-0.5">Exceeds 3-day limit</p>}
                     </div>
                   </div>
                 </Link>

@@ -119,7 +119,7 @@ export default function LoginPage() {
         </div>
 
         {/* Card */}
-        <div className="neo rounded-2xl p-6 space-y-5">
+        <div className="neo rounded-2xl p-6 space-y-5 bg-card/80 backdrop-blur-xl">
           {error && (
             <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
               <AlertCircle className="size-4 shrink-0" />
