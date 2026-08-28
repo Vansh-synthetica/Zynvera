@@ -134,7 +134,7 @@ export default function PrincipalDashboardPage() {
         ) : (
           <>
             {/* Stats */}
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
               <Stat icon={GraduationCap} label="Students" value={stats.students ?? '\u2014'} href="/principal/students" />
               <Stat icon={Users} label="Staff" value={stats.staff ?? '\u2014'} href="/principal/staff" />
               <Stat icon={BookOpen} label="Courses" value={stats.courses ?? '\u2014'} href="/principal/courses" />

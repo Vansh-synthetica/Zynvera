@@ -15,7 +15,7 @@ export default function EditCoursePage({ params }: { params: { id: string } }) {
           </Link>
           <div>
             <h1 className="text-lg font-semibold">Edit Course</h1>
-            <p className="text-sm text-muted-foreground">Changes save to the database immediately</p>
+            <p className="text-sm text-muted-foreground">Click Save Changes when done</p>
           </div>
         </div>
         <CourseEditor courseId={params.id} />

@@ -8,6 +8,7 @@ import {
   MessagesSquare,
   Search,
   ArrowLeft,
+  ChevronRight,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Card, CardContent } from '@/components/ui/card'
@@ -223,7 +224,7 @@ export default function StudentMessagesPage() {
                       key={conv.otherUserId}
                       onClick={() => openThread(conv.otherUserId)}
                       className={cn(
-                        'w-full text-left flex gap-3 px-3 py-3 hover:bg-muted/40 transition-colors',
+                        'w-full text-left flex gap-3 px-3 py-3 hover:bg-muted/40 transition-colors cursor-pointer',
                         activeId === conv.otherUserId && 'bg-muted/60',
                       )}
                     >
@@ -237,6 +238,7 @@ export default function StudentMessagesPage() {
                         </div>
                         <p className="text-xs text-muted-foreground truncate mt-0.5">{conv.lastMessage}</p>
                       </div>
+                      <ChevronRight className="size-4 shrink-0 text-muted-foreground/50" />
                     </button>
                   ))}
                 </div>
