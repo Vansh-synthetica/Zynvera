@@ -46,7 +46,6 @@ export default function SignUpPage() {
     }
     localStorage.setItem('zynvera-verification', 'unverified')
     setSuccess(true)
-    setTimeout(() => router.push('/auth/verification'), 2000)
   }
 
   return (
@@ -74,7 +73,10 @@ export default function SignUpPage() {
                 <CheckCircle2 className="size-6 text-primary" />
               </div>
               <p className="text-sm font-medium">Account created successfully!</p>
-              <p className="text-sm text-muted-foreground">Redirecting to verification...</p>
+              <p className="text-sm text-muted-foreground">Verify your email, then sign in to continue.</p>
+              <Button onClick={() => router.push('/auth/verification')} className="w-full mt-2 neo-hover neo-flat rounded-xl">
+                Continue
+              </Button>
             </div>
           ) : (
             <form onSubmit={handleSignUp} className="space-y-4">

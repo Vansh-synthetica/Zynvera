@@ -229,10 +229,10 @@ export default function StudentCalendarPage() {
                   ))
                 )}
 
-                <div className="pt-2 border-t mt-2 grid grid-cols-2 gap-1 text-[10px] text-muted-foreground">
+                <div className="pt-2 border-t mt-2 grid grid-cols-2 gap-1.5 text-xs text-muted-foreground">
                   {(Object.keys(typeColors) as string[]).map(t => (
-                    <span key={t} className="flex items-center gap-1 capitalize">
-                      <span className={cn('size-1.5 rounded-full', typeColors[t])} /> {t.replace('_', ' ')}
+                    <span key={t} className="flex items-center gap-1.5 capitalize">
+                      <span className={cn('size-2 rounded-full shrink-0', typeColors[t])} /> {t.replace('_', ' ')}
                     </span>
                   ))}
                 </div>

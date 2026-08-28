@@ -11,6 +11,8 @@ import {
   GraduationCap,
   Users,
   ExternalLink,
+  ClipboardList,
+  CalendarDays,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
@@ -18,6 +20,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { getCourse } from '@/lib/api/courses'
 import { listResources } from '@/lib/api/courses'
+import { listAssignments } from '@/lib/api/assignments'
 import { listCourseAnnouncements } from '@/lib/api/announcements'
 import { useWorkspace } from '@/lib/workspace-context'
 
@@ -26,6 +29,7 @@ export default function StudentCourseDetailPage({ params }: { params: { id: stri
   const [course, setCourse] = useState<any>(null)
   const [resources, setResources] = useState<any[]>([])
   const [announcements, setAnnouncements] = useState<any[]>([])
+  const [assignments, setAssignments] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -40,14 +44,15 @@ export default function StudentCourseDetailPage({ params }: { params: { id: stri
         setCourse(c)
 
         if (userId) {
-          // Only fetch extras if enrolled; failures degrade gracefully.
-          const [res, ann] = await Promise.all([
+          const [res, ann, asgs] = await Promise.all([
             listResources(params.id).catch(() => []),
             listCourseAnnouncements(params.id).catch(() => []),
+            listAssignments(params.id).catch(() => []),
           ])
           if (!cancelled) {
             setResources(res as any[])
             setAnnouncements(ann as any[])
+            setAssignments((asgs as any[]).filter(a => a.status === 'published' || a.status === 'active'))
           }
         }
       } catch (e: any) {
@@ -115,6 +120,41 @@ export default function StudentCourseDetailPage({ params }: { params: { id: stri
         </Card>
 
         <div className="grid gap-4 md:grid-cols-2">
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-base flex items-center gap-2">
+                <ClipboardList className="size-4" /> Assignments
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {assignments.length === 0 ? (
+                <p className="text-sm text-muted-foreground py-4 text-center">No assignments posted yet.</p>
+              ) : (
+                assignments.slice(0, 6).map(a => (
+                  <Link
+                    key={a.id}
+                    href={`/student/assignments/${a.id}`}
+                    className="flex items-center gap-2 rounded-md border p-2.5 hover:bg-secondary/30 transition-colors"
+                  >
+                    <ClipboardList className="size-4 shrink-0 text-muted-foreground" />
+                    <span className="text-sm font-medium truncate flex-1">{a.title}</span>
+                    {a.due_date && (
+                      <span className="text-[11px] text-muted-foreground shrink-0 flex items-center gap-1">
+                        <CalendarDays className="size-3" />
+                        {new Date(a.due_date).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                      </span>
+                    )}
+                  </Link>
+                ))
+              )}
+              {assignments.length > 6 && (
+                <Link href="/student/assignments" className="text-xs text-primary hover:underline block text-center pt-1">
+                  View all {assignments.length} assignments
+                </Link>
+              )}
+            </CardContent>
+          </Card>
+
           <Card>
             <CardHeader className="pb-2">
               <CardTitle className="text-base flex items-center gap-2">

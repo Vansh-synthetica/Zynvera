@@ -470,18 +470,28 @@ export default function StudentAssignmentsPage() {
                 )}
               </div>
 
-              {(submitTarget?.submission_type === 'text' ||
-                submitTarget?.submission_type === 'file') && (
+              {(submitTarget?.submission_type === 'text') && (
                 <div className="space-y-1">
-                  <Label htmlFor="sub-text">
-                    {submitTarget.submission_type === 'text' ? 'Your answer' : 'Notes for your teacher'}
-                  </Label>
+                  <Label htmlFor="sub-text">Your answer</Label>
                   <Textarea
                     id="sub-text"
                     rows={6}
                     value={textEntry}
                     onChange={e => setTextEntry(e.target.value)}
                     placeholder="Start writing…"
+                  />
+                </div>
+              )}
+
+              {submitTarget?.submission_type === 'file' && (
+                <div className="space-y-1">
+                  <Label htmlFor="sub-text">Notes for your teacher</Label>
+                  <Textarea
+                    id="sub-text"
+                    rows={4}
+                    value={textEntry}
+                    onChange={e => setTextEntry(e.target.value)}
+                    placeholder="Optional notes…"
                   />
                 </div>
               )}

@@ -47,11 +47,9 @@ export default function LoginPage() {
         .eq('id', uid)
         .maybeSingle()
       if (prof?.institution_id) {
-        const { data: inst } = await supabase
-          .from('institutions')
-          .select('name')
-          .eq('id', prof.institution_id)
-          .single()
+        const [{ data: inst }] = await Promise.all([
+          supabase.from('institutions').select('name').eq('id', prof.institution_id).single(),
+        ])
         setWorkspace({
           institutionId: prof.institution_id,
           campusId: null,

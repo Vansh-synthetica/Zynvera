@@ -193,7 +193,14 @@ function AttendanceInner() {
   const handleSave = async () => {
     if (!section || !userId) return
 
-    // Default unmarked students to present for a complete register.
+    const unmarked = roster.filter(s => !marks[s.userId])
+    if (unmarked.length > 0) {
+      const ok = window.confirm(
+        `${unmarked.length} student${unmarked.length > 1 ? 's are' : ' is'} unmarked. They will be saved as "Present". Continue?`
+      )
+      if (!ok) return
+    }
+
     const records = roster.map(s => ({
       user_id: s.userId,
       status: marks[s.userId] ?? ('present' as StatusKey),

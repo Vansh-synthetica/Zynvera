@@ -166,13 +166,16 @@ export default function TeacherTodayPage() {
   }, [classes, nowMin])
 
   const openHw = (courseId?: string) => {
-    setHwCourseId(courseId ?? courses[0]?.id ?? '')
+    const cid = courseId ?? courses[0]?.id ?? ''
+    setHwCourseId(cid)
     setHwTitle('')
     setHwDesc('')
     setHwMsg('')
     setHwErr('')
     setHwOpen(true)
   }
+
+  const hwCourseName = courses.find(c => c.id === hwCourseId)
 
   const submitHomework = async () => {
     setHwErr('')
@@ -343,7 +346,7 @@ export default function TeacherTodayPage() {
       <Dialog open={hwOpen} onOpenChange={setHwOpen}>
         <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle>Post homework</DialogTitle>
+            <DialogTitle>Post homework{hwCourseName ? ` — ${hwCourseName.title}` : ''}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
             <div className="space-y-1.5">

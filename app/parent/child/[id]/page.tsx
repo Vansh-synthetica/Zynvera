@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
 import {
   ArrowLeft,
+  ArrowRight,
   Loader2,
   AlertCircle,
   Award,
@@ -21,12 +22,16 @@ import {
 } from '@/lib/api/attendance'
 import { getCoursesByStudent } from '@/lib/api/courses'
 import { getAssignmentsDueSoon } from '@/lib/queries'
+import { getMyChildren } from '@/lib/api/institution'
 import { FeeStatus } from '@/components/fee-status'
 import { percentToLetter } from '@/lib/grading/calculate'
+import { useWorkspace } from '@/lib/workspace-context'
 import { cn } from '@/lib/utils'
 
 export default function ParentChildDetailPage({ params }: { params: { id: string } }) {
+  const { userId } = useWorkspace()
   const [childName, setChildName] = useState('')
+  const [siblings, setSiblings] = useState<{ id: string; name: string }[]>([])
   const [avg, setAvg] = useState<{ average: number | null; count: number } | null>(null)
   const [grades, setGrades] = useState<any[]>([])
   const [attSum, setAttSum] = useState<any>(null)
@@ -51,6 +56,11 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
         return
       }
       setChildName(name)
+
+      if (userId) {
+        const kids = (await getMyChildren(userId).catch(() => [])) as any[]
+        setSiblings((kids ?? []).map((k: any) => ({ id: k.student_user_id, name: k.users?.name ?? 'Child' })))
+      }
 
       const [a, g, as, ar] = await Promise.all([
         getStudentAverage(params.id).catch(() => ({ average: null, count: 0 })),
@@ -78,7 +88,7 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
     } finally {
       setLoading(false)
     }
-  }, [params.id])
+  }, [params.id, userId])
 
   useEffect(() => {
     load()
@@ -117,6 +127,25 @@ export default function ParentChildDetailPage({ params }: { params: { id: string
         </Link>
 
         <h1 className="text-2xl font-semibold tracking-tight">{childName}</h1>
+
+        {siblings.length > 1 && (
+          <div className="flex items-center gap-2">
+            {siblings.map((s, i) => (
+              <Link
+                key={s.id}
+                href={`/parent/child/${s.id}`}
+                className={cn(
+                  'px-3 py-1.5 rounded-xl text-xs font-medium transition-colors',
+                  s.id === params.id
+                    ? 'bg-primary text-primary-foreground'
+                    : 'neo-flat text-muted-foreground hover:text-foreground',
+                )}
+              >
+                {s.name}
+              </Link>
+            ))}
+          </div>
+        )}
 
         {error && (
           <div className="flex items-center gap-2 rounded-xl bg-destructive/5 border border-destructive/20 p-3 text-sm text-destructive">
