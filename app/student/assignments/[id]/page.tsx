@@ -66,6 +66,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
   const [submitting, setSubmitting] = useState(false)
   const [draftText, setDraftText] = useState('')
   const [showSubmitConfirm, setShowSubmitConfirm] = useState(false)
+  const [showUnsubmitConfirm, setShowUnsubmitConfirm] = useState(false)
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
@@ -389,7 +390,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
                       <div className="text-sm text-muted-foreground whitespace-pre-wrap">{submission.content}</div>
                     </div>
                   )}
-                  <Button variant="outline" onClick={handleUnsubmit} disabled={submitting} className="gap-1.5">
+                  <Button variant="outline" onClick={() => setShowUnsubmitConfirm(true)} disabled={submitting} className="gap-1.5">
                     {submitting ? <Loader2 className="size-4 animate-spin" /> : <RotateCcw className="size-4" />}
                     Withdraw &amp; Edit
                   </Button>
@@ -413,6 +414,9 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
                     placeholder="Type your submission or paste a link to your document..."
                     maxChars={50000}
                   />
+                  <p className="text-[11px] text-muted-foreground -mt-2">
+                    Max 50,000 characters. Your teacher sees your text and any files you attach.
+                  </p>
 
                   {/* File upload zone */}
                   <div
@@ -573,6 +577,25 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
                 <Button onClick={handleSubmit} disabled={submitting}>
                   {submitting ? <Loader2 className="size-4 mr-2 animate-spin" /> : null}
                   Confirm Submit
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Unsubmit confirm dialog */}
+        {showUnsubmitConfirm && (
+          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setShowUnsubmitConfirm(false)}>
+            <div className="neo rounded-2xl w-full max-w-md p-6 space-y-4" onClick={e => e.stopPropagation()}>
+              <h3 className="text-lg font-semibold">Withdraw Submission?</h3>
+              <p className="text-sm text-muted-foreground">
+                Your teacher will no longer see this submission. You can edit and resubmit before the due date.
+              </p>
+              <div className="flex justify-end gap-3">
+                <Button variant="outline" onClick={() => setShowUnsubmitConfirm(false)}>Cancel</Button>
+                <Button variant="destructive" onClick={() => { handleUnsubmit(); setShowUnsubmitConfirm(false) }} disabled={submitting}>
+                  {submitting ? <Loader2 className="size-4 mr-2 animate-spin" /> : null}
+                  Withdraw
                 </Button>
               </div>
             </div>

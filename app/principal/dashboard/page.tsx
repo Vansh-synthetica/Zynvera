@@ -12,10 +12,13 @@ import {
   ShieldAlert, KeyRound,
   Megaphone,
   ArrowRight,
+  Copy,
+  Check,
 } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
 import { listUsers } from '@/lib/api/students'
 import { listCourses } from '@/lib/api/courses'
 import { listAlerts } from '@/lib/api/institution'
@@ -38,6 +41,8 @@ export default function PrincipalDashboardPage() {
   const [recentNews, setRecentNews] = useState<any[]>([])
   const [joinCode, setJoinCode] = useState<string | null>(null)
   const [regenBusy, setRegenBusy] = useState(false)
+  const [regenConfirmOpen, setRegenConfirmOpen] = useState(false)
+  const [copied, setCopied] = useState(false)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
@@ -153,23 +158,28 @@ export default function PrincipalDashboardPage() {
                   Teachers and staff enter this to join your institution.
                 </p>
               </div>
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
                 <span className="font-mono text-lg font-bold tracking-[0.25em] neo-inset rounded-xl px-4 py-2">{joinCode ?? '\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7\u00B7'}</span>
                 <Button
                   variant="outline"
                   size="sm"
-                  disabled={regenBusy || !joinCode}
-                  onClick={async () => {
-                    if (!confirm('Regenerate? The old code stops working immediately.')) return
-                    setRegenBusy(true)
-                    try {
-                      const supabase = (await import('@/lib/supabase/client')).createClient()
-                      const { data } = await supabase.rpc('regenerate_join_code')
-                      if (data) setJoinCode(data)
-                    } finally {
-                      setRegenBusy(false)
+                  disabled={!joinCode}
+                  onClick={() => {
+                    if (joinCode) {
+                      navigator.clipboard.writeText(joinCode)
+                      setCopied(true)
+                      setTimeout(() => setCopied(false), 2000)
                     }
                   }}
+                  title="Copy join code"
+                >
+                  {copied ? <Check className="size-3.5" /> : <Copy className="size-3.5" />}
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={regenBusy || !joinCode}
+                  onClick={() => setRegenConfirmOpen(true)}
                 >
                   Regenerate
                 </Button>
@@ -251,6 +261,41 @@ export default function PrincipalDashboardPage() {
           </>
         )}
       </div>
+
+      {/* Regenerate join code dialog */}
+      <Dialog open={regenConfirmOpen} onOpenChange={setRegenConfirmOpen}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Regenerate Join Code?</DialogTitle>
+            <DialogDescription>
+              The old code stops working immediately. Teachers and staff using the old code will not be able to join.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setRegenConfirmOpen(false)}>Cancel</Button>
+            <Button
+              variant="destructive"
+              disabled={regenBusy}
+              onClick={async () => {
+                setRegenBusy(true)
+                try {
+                  const supabase = (await import('@/lib/supabase/client')).createClient()
+                  const { data } = await supabase.rpc('regenerate_join_code')
+                  if (data) setJoinCode(data)
+                  setRegenConfirmOpen(false)
+                } catch (e: any) {
+                  setError(e?.message ?? 'Failed to regenerate')
+                } finally {
+                  setRegenBusy(false)
+                }
+              }}
+            >
+              {regenBusy ? <Loader2 className="size-4 mr-2 animate-spin" /> : null}
+              Regenerate
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </AppShell>
   )
 }

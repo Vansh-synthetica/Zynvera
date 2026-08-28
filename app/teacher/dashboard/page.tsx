@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Loader2, AlertCircle, BookOpen, Users, ClipboardCheck, Plus, ArrowRight } from 'lucide-react'
+import { Loader2, AlertCircle, BookOpen, Users, ClipboardCheck, Plus, ArrowRight, CalendarClock, Award, ClipboardList } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -124,6 +124,19 @@ export default function TeacherDashboardPage() {
                   ))}
                 </div>
               )}
+            </div>
+
+            {/* Quick actions */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+              <Link href="/teacher/gradebook" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+                <Award className="size-4" /> Gradebook
+              </Link>
+              <Link href="/teacher/attendance" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+                <ClipboardList className="size-4" /> Attendance
+              </Link>
+              <Link href="/teacher/today" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+                <CalendarClock className="size-4" /> Today
+              </Link>
             </div>
           </>
         )}

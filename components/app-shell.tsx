@@ -14,6 +14,8 @@ import {
 } from 'lucide-react'
 import { useWorkspace } from '@/lib/workspace-context'
 import { getUnreadCount } from '@/lib/api/notifications'
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog'
+import { Button } from '@/components/ui/button'
 
 type NavItem = { label: string; href: string; icon: typeof LayoutDashboard; roles?: string[] }
 
@@ -75,6 +77,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false)
   const [searchQuery, setSearchQuery] = useState('')
   const [unreadCount, setUnreadCount] = useState(0)
+  const [signOutConfirm, setSignOutConfirm] = useState(false)
 
   useEffect(() => { setMobileOpen(false) }, [pathname])
 
@@ -105,7 +108,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="flex size-8 shrink-0 items-center justify-center rounded-xl bg-primary text-primary-foreground text-sm font-bold">Z</span>
             {!collapsed && <span className="text-sm font-semibold text-sidebar-foreground">Zynvera</span>}
           </Link>
-          <button onClick={() => setCollapsed(!collapsed)} className="ml-auto hidden lg:flex size-7 items-center justify-center rounded-lg text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50">
+          <button onClick={() => setCollapsed(!collapsed)} className="ml-auto hidden lg:flex size-7 items-center justify-center rounded-lg text-sidebar-foreground/50 hover:text-sidebar-foreground hover:bg-sidebar-accent/50" aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}>
             {collapsed ? <ChevronRight className="size-3.5" /> : <ChevronLeft className="size-3.5" />}
           </button>
         </div>
@@ -161,7 +164,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </Link>
           )}
           <button
-            onClick={() => { clearWorkspace(); window.location.assign(withBase('/auth/login')) }}
+            onClick={() => setSignOutConfirm(true)}
             className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/40"
           >
             <LogOut className="size-4" />
@@ -231,7 +234,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             </nav>
             <div className="border-t border-border/40 p-2.5 mt-2">
               <button
-                onClick={() => { clearWorkspace(); window.location.assign(withBase('/auth/login')) }}
+                onClick={() => setSignOutConfirm(true)}
                 className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] text-muted-foreground hover:bg-muted/50"
               >
                 <LogOut className="size-4" /> Sign out
@@ -312,6 +315,20 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           )}
         </div>
       </nav>
+
+      {/* Sign out confirmation */}
+      <Dialog open={signOutConfirm} onOpenChange={setSignOutConfirm}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Sign out?</DialogTitle>
+            <DialogDescription>You'll need to enter your credentials to sign back in.</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSignOutConfirm(false)}>Cancel</Button>
+            <Button onClick={() => { clearWorkspace(); window.location.assign(withBase('/auth/login')) }}>Sign out</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

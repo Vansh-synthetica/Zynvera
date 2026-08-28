@@ -355,6 +355,7 @@ export default function StudentAssignmentsPage() {
                             variant="ghost"
                             className="gap-1 h-7 text-xs"
                             onClick={() => setAppealTarget(item)}
+                            title="Request a re-grade from your teacher"
                           >
                             <Gavel className="size-3" /> Appeal
                           </Button>
@@ -551,13 +552,13 @@ function StatusChip({ sub }: { sub: MySub }) {
   switch (sub.status) {
     case 'submitted':
       return (
-        <Badge className="gap-1 bg-blue-100 text-blue-700">
+        <Badge variant="secondary" className="gap-1">
           <CheckCircle2 className="size-3" /> Submitted
         </Badge>
       )
     case 'graded':
     case 'returned':
-      return <Badge className="bg-green-100 text-green-700">Graded</Badge>
+      return <Badge variant="success">Graded</Badge>
     case 'in_progress':
       return <Badge variant="secondary">In progress</Badge>
     default:

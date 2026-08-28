@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Loader2, AlertCircle, GraduationCap, ArrowRight, KeyRound } from 'lucide-react'
+import { Loader2, AlertCircle, GraduationCap, ArrowRight, KeyRound, MessageSquare, Megaphone } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Badge } from '@/components/ui/badge'
 import { getMyChildren } from '@/lib/api/institution'
@@ -117,7 +117,7 @@ export default function ParentDashboardPage() {
                         {today[k.student_user_id].status}
                       </Badge>
                     ) : (
-                      <span className="text-xs text-muted-foreground">Not marked yet</span>
+                      <span className="text-xs text-muted-foreground">Attendance not yet taken</span>
                     )}
                   </div>
 
@@ -138,6 +138,7 @@ export default function ParentDashboardPage() {
                     <div className="rounded-xl neo-flat p-3 text-center">
                       <p className="text-[10px] text-muted-foreground uppercase tracking-wide">Absences</p>
                       <p className={`text-lg font-bold mt-0.5 ${s && s.absences > 3 ? 'text-red-500' : ''}`}>{s?.absences ?? 0}</p>
+                      {s && s.absences > 3 && <p className="text-[10px] text-red-500 mt-0.5">Exceeds 3-day limit</p>}
                     </div>
                   </div>
                 </Link>
@@ -145,6 +146,16 @@ export default function ParentDashboardPage() {
             })}
           </div>
         )}
+
+        {/* Quick links */}
+        <div className="grid grid-cols-2 gap-3">
+          <Link href="/student/messages" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+            <MessageSquare className="size-4" /> Messages
+          </Link>
+          <Link href="/student/announcements" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+            <Megaphone className="size-4" /> Announcements
+          </Link>
+        </div>
       </div>
     </AppShell>
   )

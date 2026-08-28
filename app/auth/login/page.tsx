@@ -76,10 +76,19 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     setLoading(true)
     setError('')
-    const { error: googleError } = await signInWithGoogle()
-    setLoading(false)
-    if (googleError) {
-      setError(googleError)
+    try {
+      const { error: googleError } = await signInWithGoogle()
+      if (googleError) {
+        setError(googleError)
+      }
+    } catch (e: any) {
+      if (e?.message?.includes('popup') || e?.message?.includes('blocked')) {
+        setError('Popup was blocked by your browser. Please allow popups for this site and try again.')
+      } else {
+        setError('Google sign-in failed. Please try again.')
+      }
+    } finally {
+      setLoading(false)
     }
   }
 

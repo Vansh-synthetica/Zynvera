@@ -73,7 +73,7 @@ export default function TeacherTodayPage() {
   const { userId } = useWorkspace()
 
   const today = new Date()
-  const todayStr = today.toISOString().slice(0, 10)
+  const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`
   const weekday = WEEKDAYS[today.getDay()]
 
   const [classes, setClasses] = useState<TodayClass[]>([])
@@ -217,9 +217,11 @@ export default function TeacherTodayPage() {
               {weekday}, {today.toLocaleDateString(undefined, { day: 'numeric', month: 'long' })}
             </p>
           </div>
-          <Button size="sm" onClick={() => openHw()}>
-            <Plus className="size-4 mr-1" /> Post homework
-          </Button>
+          {courses.length > 0 && (
+            <Button size="sm" onClick={() => openHw()}>
+              <Plus className="size-4 mr-1" /> Post homework
+            </Button>
+          )}
         </div>
 
         {error && (
