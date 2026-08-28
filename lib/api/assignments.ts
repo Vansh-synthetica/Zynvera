@@ -189,6 +189,37 @@ export async function returnSubmission(id: string, feedback: string) {
   return data
 }
 
+// ── Unsubmit ──────────────────────────────────────────────────────
+
+export async function unsubmitSubmission(id: string) {
+  const { data, error } = await supabase
+    .from('submissions')
+    .update({ status: 'returned', submitted_at: null })
+    .eq('id', id)
+    .select()
+    .single()
+  if (error) throw error
+  await supabase.from('submission_history').insert({ submission_id: id, status: 'returned' })
+  return data
+}
+
+// ── Submission Files ──────────────────────────────────────────────
+
+export async function uploadSubmissionFile(
+  assignmentId: string,
+  userId: string,
+  file: File,
+  onProgress?: (pct: number) => void,
+) {
+  const path = `${assignmentId}/${userId}/${Date.now()}_${file.name}`
+  const { error } = await supabase.storage
+    .from('assignment-submissions')
+    .upload(path, file, { upsert: false })
+  if (error) throw error
+  const { data: urlData } = supabase.storage.from('assignment-submissions').getPublicUrl(path)
+  return { path, url: urlData.publicUrl, name: file.name, size: file.size }
+}
+
 // ── Submission History ────────────────────────────────────────────
 
 export async function getSubmissionHistory(submissionId: string) {
