@@ -343,7 +343,7 @@ export default function AssignmentsPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-5xl px-4 py-6 space-y-6">
+      <div className="mx-auto max-w-5xl px-4 sm:px-6 py-6 space-y-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold">Assignment Manager</h1>
@@ -376,7 +376,7 @@ export default function AssignmentsPage() {
             />
           </div>
           <Select value={courseFilter} onValueChange={setCourseFilter}>
-            <SelectTrigger className="w-[220px]">
+            <SelectTrigger className="w-full sm:w-[220px]">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

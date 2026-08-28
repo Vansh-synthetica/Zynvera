@@ -79,7 +79,7 @@ export default function PrincipalStaffPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-4xl px-4 py-6 space-y-4">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h1 className="text-lg font-semibold">Staff Management</h1>

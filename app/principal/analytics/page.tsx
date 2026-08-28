@@ -81,7 +81,7 @@ export default function PrincipalAnalyticsPage() {
 
   return (
     <AppShell>
-      <div className="mx-auto max-w-4xl px-4 py-6 space-y-4">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-4">
         <div>
           <h1 className="text-lg font-semibold">Institution Analytics</h1>
           <p className="text-sm text-muted-foreground">

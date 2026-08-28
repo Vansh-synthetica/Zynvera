@@ -266,7 +266,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       )}
 
       {/* Main content */}
-      <main className={`lg:pl-[250px] transition-all duration-200 ${collapsed ? 'lg:pl-[68px]' : ''}`}>
+      <main className={`lg:pl-[250px] transition-all duration-200 pb-20 lg:pb-0 ${collapsed ? 'lg:pl-[68px]' : ''}`}>
         {children}
       </main>
 

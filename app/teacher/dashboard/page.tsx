@@ -74,7 +74,7 @@ export default function TeacherDashboardPage() {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-3 gap-3">
+            <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
               <div className="neo-sm rounded-2xl p-4">
                 <div className="size-8 rounded-xl bg-muted/50 flex items-center justify-center mb-2">
                   <BookOpen className="size-4 text-muted-foreground" />

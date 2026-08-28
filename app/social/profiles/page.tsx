@@ -623,7 +623,7 @@ export default function ProfilesPage() {
     <div className="min-h-screen bg-background pt-20">
       <Header />
 
-      <div className="container mx-auto px-4 py-6 max-w-7xl">
+      <div className="container mx-auto px-4 sm:px-6 py-6 max-w-7xl">
         <div className="mb-8 animate-fade-in-up">
           <div className="flex items-center justify-between mb-6">
             <div className="space-y-2">

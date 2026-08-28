@@ -135,7 +135,7 @@ export default function PrincipalStudentsPage() {
                 placeholder="Search students..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-[220px] pl-9"
+                className="w-full sm:w-[220px] pl-9"
               />
             </div>
             <Button onClick={() => { setImportOpen(true); setImportStep(1) }}>

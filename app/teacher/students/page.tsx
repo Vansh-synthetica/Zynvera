@@ -330,8 +330,8 @@ export default function StudentRosterPage() {
           <TabsContent value="roster" className="space-y-3 pt-2">
             <div className="flex flex-wrap items-center gap-3">
               <Select value={courseId} onValueChange={setCourseId}>
-                <SelectTrigger className="w-[260px]">
-                  <SelectValue placeholder="Choose course…" />
+                <SelectTrigger className="w-full sm:w-[260px]">
+                  <SelectValue placeholder="Choose course..." />
                 </SelectTrigger>
                 <SelectContent>
                   {courses.map(c => (
@@ -342,7 +342,7 @@ export default function StudentRosterPage() {
                 </SelectContent>
               </Select>
 
-              <div className="relative flex-1 min-w-[180px]">
+              <div className="relative flex-1 min-w-0 sm:min-w-[180px]">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
                 <Input
                   placeholder="Search students…"

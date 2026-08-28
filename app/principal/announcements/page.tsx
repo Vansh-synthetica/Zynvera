@@ -133,7 +133,7 @@ export default function PrincipalAnnouncementsPage() {
   )
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-6 space-y-6">
+    <div className="mx-auto max-w-4xl px-4 sm:px-6 py-6 space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="text-2xl font-bold">Announcements</h1>
