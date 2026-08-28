@@ -152,7 +152,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         {/* Bottom */}
         <div className="border-t border-sidebar-border/30 p-2.5 space-y-0.5">
           {!collapsed && (
-            <Link href="/student/notifications" className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/40">
+            <Link href={role === 'teacher' ? '/teacher/messages' : role === 'parent' ? '/parent/dashboard' : '/student/notifications'} className="flex items-center gap-2.5 rounded-xl px-3 py-2 text-[13px] text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent/40">
               <Bell className="size-4" />
               Notifications
               {unreadCount > 0 && (
@@ -181,7 +181,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             <span className="text-sm font-semibold">Zynvera</span>
           </Link>
           <div className="ml-auto flex items-center gap-1.5">
-            <Link href="/student/notifications" className="relative size-9 flex items-center justify-center rounded-xl neo-sm">
+            <Link href={role === 'teacher' ? '/teacher/messages' : role === 'parent' ? '/parent/dashboard' : '/student/notifications'} className="relative size-9 flex items-center justify-center rounded-xl neo-sm">
               <Bell className="size-4" />
               {unreadCount > 0 && (
                 <span className="absolute -top-0.5 -right-0.5 text-[10px] bg-accent text-accent-foreground rounded-md size-4 flex items-center justify-center font-medium">{unreadCount}</span>

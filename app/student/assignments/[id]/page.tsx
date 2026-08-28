@@ -173,13 +173,13 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
 
   // Save draft to server
   const saveDraft = async () => {
-    if (!userId || !draftText.trim()) return
+    if (!userId || (!draftText.trim() && attachedFiles.length === 0)) return
     setIsSaving(true)
     try {
       const sub = await upsertSubmission({
         assignment_id: id,
         user_id: userId,
-        content: draftText.trim(),
+        content: draftText.trim() || null,
         status: 'in_progress',
       })
       setSubmission(sub)
@@ -196,14 +196,14 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
 
   // Submit
   const handleSubmit = async () => {
-    if (!userId || !draftText.trim()) return
+    if (!userId || (!draftText.trim() && attachedFiles.length === 0)) return
     setSubmitting(true)
     setError('')
     try {
       const sub = await upsertSubmission({
         assignment_id: id,
         user_id: userId,
-        content: draftText.trim(),
+        content: draftText.trim() || null,
         status: 'submitted',
         submitted_at: new Date().toISOString(),
         file_path: attachedFiles[0]?.path ?? null,
@@ -469,10 +469,10 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
                       {isSaving && <Loader2 className="size-3 animate-spin" />}
                     </div>
                     <div className="flex items-center gap-2">
-                      <Button variant="outline" size="sm" onClick={saveDraft} disabled={!draftText.trim() || isSaving}>
+                      <Button variant="outline" size="sm" onClick={saveDraft} disabled={(!draftText.trim() && attachedFiles.length === 0) || isSaving}>
                         <Save className="size-3.5 mr-1.5" /> Save Draft
                       </Button>
-                      <Button onClick={() => setShowSubmitConfirm(true)} disabled={!draftText.trim() || submitting}>
+                      <Button onClick={() => setShowSubmitConfirm(true)} disabled={(!draftText.trim() && attachedFiles.length === 0) || submitting}>
                         {submitting ? <Loader2 className="size-4 mr-1.5 animate-spin" /> : <Send className="size-4 mr-1.5" />}
                         Submit
                       </Button>
@@ -566,7 +566,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
             <div className="neo rounded-2xl w-full max-w-md p-6 space-y-4" onClick={e => e.stopPropagation()}>
               <h3 className="text-lg font-semibold">Submit Assignment?</h3>
               <p className="text-sm text-muted-foreground">
-                You won't be able to edit after submitting. You can withdraw later if the teacher allows resubmissions.
+                Your teacher will see this submission. You can withdraw and resubmit before it's graded.
               </p>
               <div className="flex justify-end gap-3">
                 <Button variant="outline" onClick={() => setShowSubmitConfirm(false)}>Cancel</Button>

@@ -20,7 +20,6 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
-  const [rememberMe, setRememberMe] = useState(false)
   const [forgotSent, setForgotSent] = useState(false)
   const [showForgot, setShowForgot] = useState(false)
 
@@ -153,10 +152,6 @@ export default function LoginPage() {
                     {showPassword ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
                   </button>
                 </div>
-              </div>
-              <div className="flex items-center gap-2">
-                <input type="checkbox" id="remember" checked={rememberMe} onChange={e => setRememberMe(e.target.checked)} className="size-4 rounded-lg border-input" />
-                <Label htmlFor="remember" className="text-sm font-normal text-muted-foreground">Remember me</Label>
               </div>
               <Button type="submit" className="w-full" disabled={loading}>
                 {loading ? <Loader2 className="size-4 animate-spin" /> : <>Sign in <ArrowRight className="ml-1 size-4" /></>}

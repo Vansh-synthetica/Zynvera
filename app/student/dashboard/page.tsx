@@ -141,7 +141,7 @@ export default function StudentDashboardPage() {
                     return (
                       <Link
                         key={a.id}
-                        href="/student/assignments"
+                        href={`/student/assignments/${a.id}`}
                         className="flex items-center gap-3 rounded-xl p-3 neo-flat hover:bg-secondary/30 transition-colors"
                       >
                         <div className="min-w-0 flex-1">

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Loader2, AlertCircle, GraduationCap, ArrowRight } from 'lucide-react'
+import { Loader2, AlertCircle, GraduationCap, ArrowRight, KeyRound } from 'lucide-react'
 import { AppShell } from '@/components/app-shell'
 import { Badge } from '@/components/ui/badge'
 import { getMyChildren } from '@/lib/api/institution'
@@ -86,12 +86,15 @@ export default function ParentDashboardPage() {
             <Loader2 className="size-5 animate-spin mr-2" /> Loading...
           </div>
         ) : children.length === 0 ? (
-          <div className="neo rounded-2xl py-14 text-center space-y-2">
+          <div className="neo rounded-2xl py-14 text-center space-y-3">
             <GraduationCap className="size-7 mx-auto text-muted-foreground" />
             <p className="text-sm font-medium">No children linked yet</p>
             <p className="text-sm text-muted-foreground">
-              The school connects your account to your child's records.
+              Link your child's account to track their progress.
             </p>
+            <Link href="/parent/link" className="inline-flex items-center gap-1.5 text-sm text-primary hover:underline font-medium">
+              <KeyRound className="size-3.5" /> Link a child
+            </Link>
           </div>
         ) : (
           <div className="space-y-4">

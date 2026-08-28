@@ -31,7 +31,7 @@ export default function TeacherDashboardPage() {
         const asgLists = await Promise.all((cs as any[]).map(c => listAssignments(c.id).catch(() => [])))
         const totalAsg = asgLists.reduce((s, l) => s + (l as any[]).length, 0)
 
-        if (!cancelled) setStats({ courses: cs.length, students: 0, assignments: totalAsg })
+        if (!cancelled) setStats({ courses: cs.length, students: (cs as any[]).reduce((s: number, c: any) => s + (c.enrolled_students ?? 0), 0), assignments: totalAsg })
       } catch (e: any) {
         if (!cancelled) setError(e?.message ?? 'Failed to load dashboard')
       } finally {
