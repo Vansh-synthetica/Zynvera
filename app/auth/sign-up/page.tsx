@@ -16,7 +16,7 @@ export default function SignUpPage() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
-  const [role, setRole] = useState<'student' | 'teacher' | 'parent'>('student')
+  const [role, setRole] = useState<'student' | 'teacher' | 'parent' | 'principal'>('student')
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -91,11 +91,12 @@ export default function SignUpPage() {
               </div>
               <div className="space-y-2">
                 <Label>I am a</Label>
-                <div className="grid grid-cols-3 gap-2">
+                <div className="grid grid-cols-2 gap-2">
                   {([
                     ['student', 'Student'],
                     ['teacher', 'Teacher'],
                     ['parent', 'Parent'],
+                    ['principal', 'Principal'],
                   ] as const).map(([val, label]) => (
                     <button
                       key={val}

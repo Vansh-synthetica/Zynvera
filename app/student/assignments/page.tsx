@@ -28,7 +28,7 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog'
 import { getCoursesByStudent } from '@/lib/api/courses'
-import { listAssignments, getSubmission, upsertSubmission } from '@/lib/api/assignments'
+import { listAssignments, getSubmissionsByUser, upsertSubmission } from '@/lib/api/assignments'
 import { createAppeal } from '@/lib/api/appeals'
 import { getDriveStatus, uploadToDrive, type DriveStatus } from '@/lib/drive-client'
 import { useWorkspace } from '@/lib/workspace-context'
@@ -111,25 +111,22 @@ export default function StudentAssignmentsPage() {
             })),
         )
 
-        const withSubs = await Promise.all(
-          flat.map(async a => {
-            try {
-              const s = await getSubmission(a.id, userId)
-              return {
-                ...a,
-                sub: {
-                  id: s?.id ?? null,
-                  status: s?.status ?? 'not_started',
-                  score: s?.score ?? null,
-                  feedback: s?.feedback ?? null,
-                  submitted_at: s?.submitted_at ?? null,
-                },
-              }
-            } catch {
-              return { ...a, sub: { id: null, status: 'not_started', score: null, feedback: null, submitted_at: null } }
-            }
-          }),
-        )
+        const allSubs = await getSubmissionsByUser(userId, flat.map(a => a.id)).catch(() => [] as any[])
+        const subMap = new Map(allSubs.map((s: any) => [s.assignment_id, s]))
+
+        const withSubs = flat.map(a => {
+          const s = subMap.get(a.id) as any | undefined
+          return {
+            ...a,
+            sub: {
+              id: s?.id ?? null,
+              status: s?.status ?? 'not_started',
+              score: s?.score ?? null,
+              feedback: s?.feedback ?? null,
+              submitted_at: s?.submitted_at ?? null,
+            },
+          }
+        })
 
         if (!cancelled) {
           withSubs.sort((x, y) => {

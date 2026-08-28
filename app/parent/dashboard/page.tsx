@@ -156,11 +156,11 @@ export default function ParentDashboardPage() {
 
         {/* Quick links */}
         <div className="grid grid-cols-2 gap-3">
-          <Link href="/student/messages" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
-            <MessageSquare className="size-4" /> Messages
+          <Link href="/parent/link" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
+            <MessageSquare className="size-4" /> Link a child
           </Link>
-          <Link href="/student/announcements" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2">
-            <Megaphone className="size-4" /> Announcements
+          <Link href="/parent/dashboard" className="neo-sm rounded-xl p-3 text-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors flex items-center justify-center gap-2" onClick={() => load()}>
+            <Megaphone className="size-4" /> Refresh
           </Link>
         </div>
       </div>

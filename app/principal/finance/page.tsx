@@ -77,8 +77,10 @@ export default function PrincipalFinancePage() {
 
   // budget editor
   const [bCategory, setBCategory] = useState('')
-  const [bYear, setBYear] = useState(String(new Date().getFullYear()))
   const [bAmount, setBAmount] = useState('')
+
+  // delete confirmation
+  const [deleteTarget, setDeleteTarget] = useState<TxRow | null>(null)
   const [bBusy, setBBusy] = useState(false)
 
   // fees
@@ -474,7 +476,7 @@ export default function PrincipalFinancePage() {
                           {t.type === 'income' ? '+' : '−'}{fmtMoney(Number(t.amount))}
                         </span>
                         <Button variant="ghost" size="sm" className="size-7 p-0 shrink-0 text-muted-foreground hover:text-destructive"
-                          onClick={async () => { await deleteTransaction(t.id); load() }} aria-label="Delete">
+                          onClick={() => setDeleteTarget(t)} aria-label="Delete">
                           <Trash2 className="size-3.5" />
                         </Button>
                       </div>
@@ -584,6 +586,27 @@ export default function PrincipalFinancePage() {
             <Button onClick={handleAdd} disabled={busy || !parseFloat(amount)} className="gap-1">
               {busy && <Loader2 className="size-4 animate-spin" />} Save
             </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete confirmation */}
+      <Dialog open={!!deleteTarget} onOpenChange={() => setDeleteTarget(null)}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete transaction?</DialogTitle>
+            <DialogDescription>
+              This will permanently remove this {deleteTarget?.type} of {fmtMoney(Number(deleteTarget?.amount ?? 0))} from your records. This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDeleteTarget(null)}>Cancel</Button>
+            <Button variant="destructive" onClick={async () => {
+              if (!deleteTarget) return
+              await deleteTransaction(deleteTarget.id)
+              setDeleteTarget(null)
+              load()
+            }}>Delete</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

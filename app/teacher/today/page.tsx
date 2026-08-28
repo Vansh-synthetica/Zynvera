@@ -266,13 +266,23 @@ export default function TeacherTodayPage() {
           <Card>
             <CardContent className="py-14 text-center space-y-2">
               <ClipboardList className="size-7 mx-auto text-muted-foreground" />
-              <p className="text-sm font-medium">No scheduled classes for {weekday}</p>
-              <p className="text-sm text-muted-foreground">
-                Add class sections with a weekday &amp; time in My Classes.
+              <p className="text-sm font-medium">
+                {['Saturday', 'Sunday'].includes(weekday)
+                  ? `No classes on ${weekday}s`
+                  : `No scheduled classes for ${weekday}`
+                }
               </p>
-              <Button asChild variant="outline" size="sm" className="mt-2">
-                <Link href="/teacher/classes">Go to My Classes</Link>
-              </Button>
+              <p className="text-sm text-muted-foreground">
+                {['Saturday', 'Sunday'].includes(weekday)
+                  ? 'Enjoy your weekend!'
+                  : 'Add class sections with a weekday & time in My Classes.'
+                }
+              </p>
+              {!['Saturday', 'Sunday'].includes(weekday) && (
+                <Button asChild variant="outline" size="sm" className="mt-2">
+                  <Link href="/teacher/classes">Go to My Classes</Link>
+                </Button>
+              )}
             </CardContent>
           </Card>
         ) : (

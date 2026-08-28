@@ -113,6 +113,28 @@ export async function getSubmission(assignmentId: string, userId: string) {
   return data
 }
 
+export async function getSubmissionsByUser(userId: string, assignmentIds: string[]) {
+  if (!assignmentIds.length) return []
+  const { data, error } = await supabase
+    .from('submissions')
+    .select('*')
+    .eq('user_id', userId)
+    .in('assignment_id', assignmentIds)
+  if (error) throw error
+  return data ?? []
+}
+
+export async function getSubmissionsByStudent(userId: string, assignmentIds: string[]) {
+  if (!assignmentIds.length) return []
+  const { data, error } = await supabase
+    .from('submissions')
+    .select('*')
+    .eq('user_id', userId)
+    .in('assignment_id', assignmentIds)
+  if (error) throw error
+  return data ?? []
+}
+
 export async function upsertSubmission(sub: Tables['submissions']['Insert']) {
   const { data, error } = await supabase
     .from('submissions')

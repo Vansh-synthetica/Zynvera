@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import {
   Download,
@@ -64,6 +64,13 @@ export default function GradebookPage() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   const [savingCell, setSavingCell] = useState<string | null>(null)
+  const [savedCell, setSavedCell] = useState<string | null>(null)
+  const savedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  useEffect(() => {
+    return () => { if (savedTimer.current) clearTimeout(savedTimer.current) }
+  }, [])
+
   const [tab, setTab] = useState('grid')
 
   // appeals
@@ -180,6 +187,9 @@ export default function GradebookPage() {
       setError(e?.message ?? 'Save failed')
     } finally {
       setSavingCell(null)
+      setSavedCell(key)
+      if (savedTimer.current) clearTimeout(savedTimer.current)
+      savedTimer.current = setTimeout(() => setSavedCell(null), 1500)
     }
   }
 
@@ -427,6 +437,9 @@ export default function GradebookPage() {
                                   />
                                   {savingCell === key && (
                                     <Loader2 className="size-3 animate-spin absolute right-2 top-2.5 text-muted-foreground" />
+                                  )}
+                                  {savedCell === key && savingCell !== key && (
+                                    <CheckCircle2 className="size-3 absolute right-2 top-2.5 text-green-500" />
                                   )}
                                 </td>
                               )

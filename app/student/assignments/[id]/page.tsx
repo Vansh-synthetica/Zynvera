@@ -268,6 +268,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
   const attachments = assignment.assignment_attachments ?? []
   const rubricItems = assignment.rubric_items ?? []
   const courseTitle = assignment.courses?.title ?? ''
+  const courseId = assignment.course_id ?? ''
   const dueDate = assignment.due_date
 
   return (
@@ -280,7 +281,7 @@ export default function AssignmentDetailPage({ params }: { params: Promise<{ id:
           </Link>
           <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
             <div>
-              {courseTitle && <Badge variant="outline" className="text-xs mb-2">{courseTitle}</Badge>}
+              {courseTitle && <Link href={`/student/courses/${courseId}`}><Badge variant="outline" className="text-xs mb-2 hover:bg-muted cursor-pointer">{courseTitle}</Badge></Link>}
               <h1 className="text-2xl font-semibold tracking-tight">{assignment.title}</h1>
               {assignment.instructions && (
                 <p className="mt-1 text-sm text-muted-foreground line-clamp-2">{assignment.instructions}</p>
